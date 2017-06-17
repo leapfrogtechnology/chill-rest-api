@@ -27,12 +27,16 @@ export function fetchLatestStatuses() {
  * @return {Promise}
  */
 export async function getStatus(id) {
-  return await new Status({ id }).fetch()
-    .then(status => {
-      if (!status) {
-        throw new Boom.notFound('Service not found');
-      }
+  try {
 
-      return status;
-    });
+    let status = await new Status({ id }).fetch();
+
+    if (!status) {
+      throw new Boom.notFound('Service not found');
+    }
+
+    return status;
+  } catch (err) {
+    throw new Boom.notFound('Internal Server Error');
+  }
 }
