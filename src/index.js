@@ -37,7 +37,7 @@ app.use(errorHandler.genericErrorHandler);
 app.use(errorHandler.notFoundError);
 
 app.listen(app.get('port'), app.get('host'), () => {
-  logger.log('info', `Server started at http://${app.get('host')}:${app.get('port')}`);
+  logger.info('info', `Server started at http://${app.get('host')}:${app.get('port')}`);
 });
 
 export default app;

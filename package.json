@@ -9,7 +9,7 @@
   },
   "keywords": [
     "chill",
-    "dashboard"
+    "rest-api"
   ],
   "private": true,
   "authors": [],
@@ -41,10 +41,6 @@
     "babel-eslint": "^7.1.1",
     "babel-jest": "^19.0.0",
     "babel-loader": "^6.2.10",
-    "babel-plugin-istanbul": "^4.1.1",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.0",
-    "babel-plugin-transform-react-remove-prop-types": "^0.3.3",
-    "babel-plugin-transform-runtime": "^6.15.0",
     "babel-preset-env": "^1.3.2",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-es2016": "^6.16.0",

@@ -1,4 +1,4 @@
-import {Router} from 'express';
+import { Router } from 'express';
 import * as statusService from '../services/status';
 
 const router = Router();
@@ -8,7 +8,7 @@ const router = Router();
  */
 router.get('/', (req, res, next) => {
   statusService.fetchLatestStatuses()
-    .then(data => res.json({data}))
+    .then(data => res.json({ data }))
     .catch(err => next(err));
 });
 
@@ -18,7 +18,7 @@ router.get('/', (req, res, next) => {
  */
 router.get('/:id', (req, res, next) => {
   statusService.getStatus(req.params.id)
-    .then(data => res.json({data}))
+    .then(data => res.json({ data }))
     .catch(err => next(err));
 });
 

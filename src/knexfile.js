@@ -6,6 +6,6 @@ require('dotenv').config();
 module.exports = {
   client: process.env.DB_CLIENT,
   connection: {
-    filename: process.env.DB_FILE,
+    filename: process.env.DB_FILE
   }
 };

@@ -33,5 +33,6 @@ export function genericErrorHandler(err, req, res, next) {  // eslint-disable-li
   logger.error(err);
 
   let error = buildError(err);
-  res.status(error.code).json({error});
+
+  res.status(error.code).json({ error });
 }
