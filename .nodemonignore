@@ -5,5 +5,5 @@ dist
 test
 
 # Other directories
-src/server/seeds
-src/server/migrations
+src/seeds
+src/migrations
