@@ -2039,7 +2039,7 @@ lodash.restparam@^3.0.0:
   version "3.6.1"
   resolved "https://registry.yarnpkg.com/lodash.restparam/-/lodash.restparam-3.6.1.tgz#936a4e309ef330a7645ed4145986c85ae5b20805"
 
-lodash@^4.13.1, lodash@^4.17.2, lodash@^4.2.0, lodash@^4.6.0:
+lodash@^4.13.1, lodash@^4.17.2, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.6.0:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
@@ -2060,6 +2060,10 @@ map-stream@~0.1.0:
 media-typer@0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/media-typer/-/media-typer-0.3.0.tgz#8710d7af0aa626f8fffa1ce00168545263255748"
+
+memory-cache@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/memory-cache/-/memory-cache-0.1.6.tgz#2ed9933ed7a8c718249be7366f7ca8749acf8a24"
 
 merge-descriptors@1.0.1:
   version "1.0.1"
@@ -3088,6 +3092,12 @@ verror@1.3.6:
   dependencies:
     extsprintf "1.0.2"
 
+webpack-merge@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/webpack-merge/-/webpack-merge-4.1.0.tgz#6ad72223b3e0b837e531e4597c199f909361511e"
+  dependencies:
+    lodash "^4.17.4"
+
 which@^1.2.12:
   version "1.2.14"
   resolved "https://registry.yarnpkg.com/which/-/which-1.2.14.tgz#9a87c4378f03e827cecaf1acdf56c736c01c14e5"
@@ -3136,6 +3146,13 @@ xdg-basedir@^2.0.0:
   resolved "https://registry.yarnpkg.com/xdg-basedir/-/xdg-basedir-2.0.0.tgz#edbc903cc385fc04523d966a335504b5504d1bd2"
   dependencies:
     os-homedir "^1.0.0"
+
+yamljs@^0.2.10:
+  version "0.2.10"
+  resolved "https://registry.yarnpkg.com/yamljs/-/yamljs-0.2.10.tgz#481cc7c25ca73af59f591f0c96e3ce56c757a40f"
+  dependencies:
+    argparse "^1.0.7"
+    glob "^7.0.5"
 
 z-schema@^3.16.1:
   version "3.18.2"

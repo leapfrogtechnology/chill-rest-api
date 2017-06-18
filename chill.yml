@@ -1,0 +1,32 @@
+logging:
+    level: 'info'
+    logDir: 'logs'
+    jsonFormat: false
+    levelColumnWidth: 7
+    tsFormat: () => new Date().toISOString()
+    dateFormat: 'yyyy-MM-dd'
+
+monitoring:
+  minInterval: 1000
+  maxInterval: 10000
+  method: OPTIONS
+  downStatus: '^(5..|4..)$'
+
+notifications:
+  slack:
+    enabled: false
+    endpoint: SLACK_WEBHOOK_ENDPOINT_HERE
+  hipchat:
+    enabled: true
+    authToken: 'S055ClZ119XLjStyYBDrlpKz5UIsoEdH4sxhImy55'
+    roomId: '3743872'
+  twilio:
+    enabled: false
+    sender: SENDING_NUMBER
+    receiver: RECEIVING_NUMBER
+    authToken: AUTH_TOKEN
+    accountSid: ACCOUNT_SID
+
+services:
+  - name: 'Localhost'
+    url: 'http://127.0.0.1'
