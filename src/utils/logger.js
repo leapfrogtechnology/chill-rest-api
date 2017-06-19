@@ -62,7 +62,7 @@ function createLogger(config) {
 
   createDirectory(logDir);
 
-  return new (winston.Logger)({
+  let logger = new (winston.Logger)({
     transports: [
       new winston.transports.Console({
         level: level,
@@ -80,6 +80,14 @@ function createLogger(config) {
       })
     ]
   });
+
+  logger.stream = {
+    write(message) {
+      logger.info(message);
+    }
+  };
+
+  return logger;
 }
 
 /**
