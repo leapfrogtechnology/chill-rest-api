@@ -1,25 +1,15 @@
-import { Router } from 'express';
 import * as statusService from '../services/status';
 
-const router = Router();
-
 /**
- * GET /api/status
+ * Get the latest status of all the services.
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Object} next
  */
-router.get('/', (req, res, next) => {
+export function getStatus(req, res, next) {
   statusService.fetchLatestStatuses()
-    .then(data => res.json({ data }))
+    .then(data => res.json(data))
     .catch(err => next(err));
-});
+}
 
-
-/**
- * GET /api/status/:id
- */
-router.get('/:id', (req, res, next) => {
-  statusService.getStatus(req.params.id)
-    .then(data => res.json({ data }))
-    .catch(err => next(err));
-});
-
-export default router;
