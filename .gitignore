@@ -34,3 +34,4 @@ coverage
 
 # Chill database
 chill.db
+chill.yml

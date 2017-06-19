@@ -1,3 +1,7 @@
+// Note: This file is a total copy-paste from the chill repository
+// we'll need to extract a new package called chill-core or chill-common where
+// we can put all the common, initialization/config code.
+
 import Yaml from 'yamljs';
 import Promise from 'bluebird';
 import cache from 'memory-cache';
@@ -17,6 +21,8 @@ export const DEFAULT_FILENAME = 'chill.yml';
  * @returns {Object}
  */
 export function resolve(filename = DEFAULT_FILENAME) {
+  process.stdout.write(`Loading config file: ${filename}\n`);
+
   let loadedConfig = Yaml.load(filename);
   let config = merge(defaultConfig, loadedConfig);
 
