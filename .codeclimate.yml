@@ -1,6 +1,5 @@
 engines:
   eslint:
-    channel: eslint-3
     enabled: true
   duplication:
     enabled: true
@@ -15,7 +14,5 @@ ratings:
 exclude_paths:
 - dist/*
 - test/**/*
-- logs/**/*
-- public/**/*
 - coverage/**/*
 - node_modules/**/*
