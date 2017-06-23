@@ -1,0 +1,65 @@
+{
+  "name": "chill-rest-api",
+  "version": "1.0.0-alpha.1",
+  "description": "REST API for the chill monitoring service.",
+  "scripts": {
+    "lint": "eslint src test; exit 0",
+    "lint:fix": "eslint src test --fix; exit 0",
+    "start": "nodemon --watch src/ --exec babel-node src/ --source-maps",
+    "clean": "rimraf dist/",
+    "babel": "babel src/ -d dist/",
+    "build": "run-s lint clean babel",
+    "migrate": "knex migrate:latest",
+    "rollback": "knex migrate:rollback"
+  },
+  "keywords": [
+    "chill",
+    "rest-api"
+  ],
+  "authors": [],
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "bookshelf": "^0.10.2",
+    "bookshelf-camelcase": "^1.1.4",
+    "boom": "^4.2.0",
+    "compression": "^1.6.2",
+    "cors": "^2.8.1",
+    "express": "^4.14.1",
+    "helmet": "^3.2.0",
+    "http-status-codes": "^1.0.6",
+    "joi": "^10.1.0",
+    "knex": "^0.12.6",
+    "memory-cache": "^0.1.6",
+    "morgan": "^1.7.0",
+    "npm-run-all": "^4.0.2",
+    "serve-favicon": "^2.4.2",
+    "sqlite3": "^3.1.8",
+    "swagger-jsdoc": "^1.9.0",
+    "webpack-merge": "^4.1.0",
+    "winston": "^2.3.0",
+    "winston-daily-rotate-file": "^1.4.0",
+    "yamljs": "^0.2.10"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.22.1",
+    "babel-eslint": "^7.1.1",
+    "babel-jest": "^19.0.0",
+    "babel-loader": "^6.2.10",
+    "babel-plugin-dynamic-import-node": "^1.0.2",
+    "babel-preset-env": "^1.3.2",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-es2016": "^6.24.1",
+    "babel-preset-es2017": "^6.24.1",
+    "babel-register": "^6.24.1",
+    "eslint": "^3.19.0",
+    "nodemon": "^1.11.0",
+    "rimraf": "^2.6.1",
+    "semver": "^5.3.0"
+  },
+  "engines": {
+    "node": ">= 6.9.0",
+    "npm": ">= 3.10.8"
+  }
+}
