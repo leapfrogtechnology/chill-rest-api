@@ -16,6 +16,7 @@ router.get('/status/logs', statusLogController.getAll);
 
 // Services
 router.get('/services', serviceController.getAll);
-router.get('/services/:id', serviceController.get);
+router.get('/services/:id(\d+)', serviceController.get);
+router.post('/services/synchronize', serviceController.synchronize); // TODO: Auth Token
 
 export default router;

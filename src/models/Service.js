@@ -1,4 +1,5 @@
 import { getClient } from '../utils/db';
+import logger from '../utils/logger';
 
 const db = getClient();
 
@@ -13,6 +14,28 @@ class Service extends db.Model {
 
   get hasTimestamps() {
     return true;
+  }
+
+  /**
+  * Create a new Service.
+  *
+  * @param  {Object} data
+  * @return {Promise}
+  */
+  static async create(data) {
+    let service = new Service({
+      name: data.name,
+      url: data.url
+    });
+
+    logger().info('Creating a new service');
+    logger().debug('Service data', data);
+
+    await service.save();
+
+    logger().info('Service created', { id: service.get('id') });
+
+    return service;
   }
 }
 

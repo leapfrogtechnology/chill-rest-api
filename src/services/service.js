@@ -35,3 +35,19 @@ export async function fetch(id) {
 
   return result;
 }
+
+/**
+ * Create and save service data.
+ *
+ * @param {Object}
+ * @returns {Promise}
+ */
+export async function create(data) {
+  try {
+    let service = await Service.create(data);
+
+    return service.toJSON();
+  } catch (err) {
+    logger().error('Error while persisting the service into database', err);
+  }
+}
