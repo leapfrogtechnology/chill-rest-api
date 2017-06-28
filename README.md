@@ -1,6 +1,8 @@
 # Chill REST API
 
-REST API for the [chill](https://github.com/leapfrogtechnology/chill) monitoring service.
+REST API and the persistance layer for the [chill](https://github.com/leapfrogtechnology/chill) monitoring service. 
+
+The monitor (chill) could be used as a standalone monitoring service too, but if you need to persist the status change logs and/or visualize the status change data into the [dashboard](https://github.com/leapfrogtechnology/chill-dashboard) you'll need this service.
 
 ## Setup
 
