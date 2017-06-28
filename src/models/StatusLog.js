@@ -1,4 +1,5 @@
-import camelize from 'camelize';
+import Status from './Status';
+import Service from './Service';
 import logger from '../utils/logger';
 import { getClient } from '../utils/db';
 
@@ -14,47 +15,41 @@ class StatusLog extends db.Model {
     return true;
   }
 
+  service() {
+    return this.belongsTo(Service);
+  }
+
+  status() {
+    return this.belongsTo(Status);
+  }
+
   static fetchAllLogs() {
     logger().info('Fetching all status logs');
 
-    return db.knex
-      .select([
-        'status_logs.*',
-        'services.name as service_name',
-        'services.url as url',
-        'statuses.name as status'
-      ])
-      .from('status_logs')
-      .innerJoin('services', 'status_logs.service_id', 'services.id')
-      .innerJoin('statuses', 'status_logs.status_id', 'statuses.id')
-      .orderBy('created_at', 'DESC')
-      .then(data => {
-        logger().debug('Retrieved status logs: ', data);
-
-        return camelize(data);
-      });
+    return StatusLog
+      .collection()
+      .query(qb => qb.orderBy('created_at', 'DESC'))
+      .fetch({
+        debug: true,
+        withRelated: ['status', 'service']
+      })
+      .then(collection => collection.toJSON());
   }
 
   static fetchLatestStatuses() {
     logger().info('Fetching the latest status');
 
-    return db.knex
-      .select([
-        'status_logs.*',
-        'services.name as service_name',
-        'services.url as url',
-        'statuses.name as status'
-      ])
-      .from('status_logs')
-      .innerJoin('services', 'status_logs.service_id', 'services.id')
-      .innerJoin('statuses', 'status_logs.status_id', 'statuses.id')
-      .groupBy('status_logs.service_id')
-      .orderBy('created_at', 'DESC')
-      .then(data => {
-        logger().debug('Retrieved the latest status logs: ', data);
-
-        return camelize(data);
-      });
+    return StatusLog
+      .collection()
+      .query(qb =>
+        qb.groupBy('service_id')
+          .orderBy('created_at', 'DESC')
+      )
+      .fetch({
+        debug: true,
+        withRelated: ['status', 'service']
+      })
+      .then(collection => collection.toJSON());
   }
 }
 

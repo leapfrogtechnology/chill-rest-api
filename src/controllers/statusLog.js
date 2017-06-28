@@ -1,3 +1,4 @@
+import HttpStatus from 'http-status-codes';
 import * as statusLogService from '../services/statusLog';
 
 /**
@@ -27,3 +28,16 @@ export function getLatestStatus(req, res, next) {
     .catch(err => next(err));
 }
 
+/**
+ * Save the status change log into the database.
+ *
+ * @export
+ * @param {any} req
+ * @param {any} res
+ * @param {any} next
+ */
+export function save(req, res, next) {
+  statusLogService.save(req.body)
+    .then(data => res.status(HttpStatus.CREATED).json(data))
+    .catch(err => next(err));
+}

@@ -1,5 +1,7 @@
 import knex from 'knex';
 import bookshelf from 'bookshelf';
+import bookshelfCamelcase from 'bookshelf-camelcase';
+
 import * as config from '../config/config';
 
 /**
@@ -18,7 +20,7 @@ export function getClient() {
   const dbConfig = config.get().db;
 
   db = bookshelf(knex(dbConfig));
-  db.plugin(['bookshelf-camelcase']);
+  db.plugin(bookshelfCamelcase);
 
   return db;
 }
