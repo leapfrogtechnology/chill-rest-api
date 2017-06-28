@@ -28,6 +28,13 @@ export async function synchronize() {
   return result;
 }
 
+/**
+ * Persist all the required changes in order to synchronize the database
+ * with the configured services.
+ *
+ * @param {Object} diff
+ * @returns {Promise}
+ */
 async function persist(diff) {
   // Persist all the services that hasn't been synced to the database yet.
   let persistingPromises = diff.notPersisted.map(service => {
