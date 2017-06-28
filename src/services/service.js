@@ -1,6 +1,8 @@
 import Boom from 'boom';
+
 import logger from '../utils/logger';
 import Service from '../models/Service';
+
 /**
  * Fetch all services.
  *
@@ -23,7 +25,7 @@ export async function fetchAll() {
  * @return {Promise}
  */
 export async function fetch(id) {
-  logger().info('Fetching a service by id', { id });
+  logger().debug('Fetching a service by id', { id });
 
   let result = await new Service({ id }).fetch();
 

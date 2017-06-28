@@ -1,5 +1,7 @@
 import logger from '../utils/logger';
 import StatusLog from '../models/StatusLog';
+import { fetch as fetchService } from './service';
+import { fetch as fetchStatus } from './status';
 
 /**
  * Get all status logs.
@@ -28,10 +30,28 @@ export function fetchLatestStatuses() {
  * @return {Object}
  */
 export async function save(data) {
+  await ensureAttributesExist(data);
+
   logger().info('Saving status change log');
   logger().debug('Data: ', data);
 
   let model = await StatusLog.forge(data).save();
 
   return model.toJSON();
+}
+
+/**
+ * Verifies that the attributes (serviceId & statusId)
+ * exists in the database before they're saved in the status log.
+ *
+ * @param {Object} data
+ * @returns {Promise}
+ */
+function ensureAttributesExist(data) {
+  logger().debug('Ensure status log attributes exist: ', data);
+
+  return Promise.all([
+    fetchService(data.serviceId),
+    fetchStatus(data.statusId)
+  ]);
 }
