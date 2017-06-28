@@ -1,5 +1,6 @@
-import { getClient } from '../utils/db';
+import camelize from 'camelize';
 import logger from '../utils/logger';
+import { getClient } from '../utils/db';
 
 const db = getClient();
 const TABLE_NAME = 'status_logs';
@@ -17,7 +18,12 @@ class StatusLog extends db.Model {
     logger().info('Fetching all status logs');
 
     return db.knex
-      .select('status_logs.*', 'services.name as service_name', 'statuses.name as status')
+      .select([
+        'status_logs.*',
+        'services.name as service_name',
+        'services.url as url',
+        'statuses.name as status'
+      ])
       .from('status_logs')
       .innerJoin('services', 'status_logs.service_id', 'services.id')
       .innerJoin('statuses', 'status_logs.status_id', 'statuses.id')
@@ -25,7 +31,7 @@ class StatusLog extends db.Model {
       .then(data => {
         logger().debug('Retrieved status logs: ', data);
 
-        return data;
+        return camelize(data);
       });
   }
 
@@ -33,7 +39,12 @@ class StatusLog extends db.Model {
     logger().info('Fetching the latest status');
 
     return db.knex
-      .select('status_logs.*', 'services.name as service_name', 'statuses.name as status')
+      .select([
+        'status_logs.*',
+        'services.name as service_name',
+        'services.url as url',
+        'statuses.name as status'
+      ])
       .from('status_logs')
       .innerJoin('services', 'status_logs.service_id', 'services.id')
       .innerJoin('statuses', 'status_logs.status_id', 'statuses.id')
@@ -42,7 +53,7 @@ class StatusLog extends db.Model {
       .then(data => {
         logger().debug('Retrieved the latest status logs: ', data);
 
-        return data;
+        return camelize(data);
       });
   }
 }

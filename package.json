@@ -26,6 +26,7 @@
     "bookshelf": "^0.10.2",
     "bookshelf-camelcase": "^1.1.4",
     "boom": "^4.2.0",
+    "camelize": "^1.0.0",
     "compression": "^1.6.2",
     "cors": "^2.8.1",
     "express": "^4.14.1",
