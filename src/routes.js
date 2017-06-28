@@ -1,26 +1,30 @@
 import { Router } from 'express';
-// Controllers
-import * as homeController from './controllers/home';
-import * as serviceController from './controllers/service';
-import * as statusLogController from './controllers/statusLog';
 // Validators
 import { validateStatusLog } from './validators/statusLog';
+// Controllers
+import * as homeController from './controllers/home';
+import * as statusController from './controllers/status';
+import * as serviceController from './controllers/service';
+import * as statusLogController from './controllers/statusLog';
 
 const router = Router();
 
 router.get('/swagger.json', homeController.getSwaggerSpec);
 router.get('/', homeController.getAppInfo);
 
-// Latest status of Services
+// Current status of services
 router.get('/status', statusLogController.getLatestStatus);
 
 // Status Change logs
 router.get('/status/logs', statusLogController.getAll);
-router.post('/status/logs', validateStatusLog, statusLogController.save);
+router.post('/status/logs', validateStatusLog, statusLogController.save); // TODO: Auth Token
 
 // Services
 router.get('/services', serviceController.getAll);
 router.get('/services/:id(\d+)', serviceController.get);
 router.post('/services/synchronize', serviceController.synchronize); // TODO: Auth Token
+
+// Statuses
+router.get('/statuses', statusController.getAll);
 
 export default router;

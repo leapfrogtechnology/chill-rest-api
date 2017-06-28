@@ -22,3 +22,18 @@ export async function fetch(id) {
 
   return result;
 }
+
+/**
+ * Fetch all statuses.
+ *
+ * @return {Promise}
+ */
+export async function fetchAll() {
+  logger().info('Fetching all the statuses.');
+
+  let result = await Status.fetchAll();
+
+  logger().debug('Retrieved list of statuses', result.toJSON());
+
+  return result;
+}
