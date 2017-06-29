@@ -23,6 +23,12 @@ class StatusLog extends db.Model {
     return this.belongsTo(Status);
   }
 
+  static fetchServiceStatus(serviceId) {
+    logger().info(`Fetching the latest status of service ${serviceId}`);
+
+    return new StatusLog({ serviceId }).orderBy('created_at', 'DESC').fetch();
+  }
+
   static fetchAllLogs() {
     logger().info('Fetching all status logs');
 

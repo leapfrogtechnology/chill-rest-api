@@ -21,7 +21,8 @@ router.post('/status/logs', validateStatusLog, statusLogController.save); // TOD
 
 // Services
 router.get('/services', serviceController.getAll);
-router.get('/services/:id(\d+)', serviceController.get);
+router.get('/services/:id(\\d+)', serviceController.get);
+router.get('/services/:id(\\d+)/status', serviceController.getServiceStatus);
 
 // Statuses
 router.get('/statuses', statusController.getAll);
