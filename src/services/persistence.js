@@ -23,7 +23,7 @@ export async function synchronize() {
   let diff = computeDiff(configuredServices, existingServices.toJSON());
   let result = await persist(diff);
 
-  logger().debug('Persisted the changes', result);
+  logger().info('Persisted the changes.');
 
   return result;
 }
@@ -59,7 +59,10 @@ async function persist(diff) {
   let data = await Service.fetchAll();
   let created = (persistingPromises.length > 0);
 
-  return { created, data };
+  return {
+    created,
+    data: data.toJSON()
+  };
 }
 
 /**

@@ -13,7 +13,8 @@
     "make:migration": "knex migrate:make",
     "seed": "knex seed:run",
     "migrate": "knex migrate:latest",
-    "rollback": "knex migrate:rollback"
+    "rollback": "knex migrate:rollback",
+    "synchronize": "babel-node ./src/scripts/synchronize"
   },
   "keywords": [
     "chill",

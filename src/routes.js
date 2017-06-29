@@ -22,7 +22,6 @@ router.post('/status/logs', validateStatusLog, statusLogController.save); // TOD
 // Services
 router.get('/services', serviceController.getAll);
 router.get('/services/:id(\d+)', serviceController.get);
-router.post('/services/synchronize', serviceController.synchronize); // TODO: Auth Token
 
 // Statuses
 router.get('/statuses', statusController.getAll);
