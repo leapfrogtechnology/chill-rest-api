@@ -2,7 +2,8 @@ import 'babel-polyfill';
 import { resolveConfig } from '../init';
 
 (async () => {
-  const config = await resolveConfig();
+  await resolveConfig();
+
   const db = await import('../utils/db');
   const { synchronize } = await import('../services/persistence');
 

@@ -14,7 +14,6 @@ export function getAll(req, res, next) {
     .catch(err => next(err));
 }
 
-
 /**
  * Get the latest status of all the services.
  *

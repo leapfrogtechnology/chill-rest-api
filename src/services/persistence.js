@@ -78,6 +78,7 @@ function computeDiff(configuredServices, persistedServices) {
 
   return { notPersisted, notRequired };
 }
+
 /**
  * A comparator callback function based upon which the diff is computed
  * between the configured services and persisted services.

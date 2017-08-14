@@ -1,5 +1,5 @@
-import { getClient } from '../utils/db';
 import logger from '../utils/logger';
+import { getClient } from '../utils/db';
 
 const db = getClient();
 

@@ -1,7 +1,7 @@
 import { Router } from 'express';
-// Validators
+
 import { validateStatusLog } from './validators/statusLog';
-// Controllers
+
 import * as homeController from './controllers/home';
 import * as statusController from './controllers/status';
 import * as serviceController from './controllers/service';
