@@ -9,9 +9,7 @@
     "clean": "rimraf dist/",
     "babel": "babel src/ -d dist/",
     "build": "run-s lint clean babel",
-    "make:seed": "knex seed:make",
     "make:migration": "knex migrate:make",
-    "seed": "knex seed:run",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
     "synchronize": "babel-node ./src/scripts/synchronize"
