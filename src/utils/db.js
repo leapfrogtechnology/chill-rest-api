@@ -2,6 +2,7 @@ import knex from 'knex';
 import bookshelf from 'bookshelf';
 import bookshelfCamelcase from 'bookshelf-camelcase';
 
+import logger from './logger';
 import * as config from '../config/config';
 
 /**
@@ -18,6 +19,13 @@ export function getClient() {
   }
 
   const dbConfig = config.get().db;
+
+  logger().info(`Setting up database configuration (${dbConfig.client})`);
+  logger().debug('Database Details', {
+    client: dbConfig.client,
+    filename: dbConfig.connection.filename,
+    database: dbConfig.connection.database
+  });
 
   db = bookshelf(knex(dbConfig));
   db.plugin(bookshelfCamelcase);
