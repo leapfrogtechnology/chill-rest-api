@@ -1,7 +1,7 @@
 import logger from '../utils/logger';
 import StatusLog from '../models/StatusLog';
-import { fetch as fetchService } from './service';
 import { fetch as fetchStatus } from './status';
+import { fetch as fetchService } from './service';
 
 /**
  * Get all status logs.

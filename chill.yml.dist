@@ -2,9 +2,18 @@ logging:
   level: debug
 
 db:
+# SQLite Database Configuration
   client: 'sqlite3'
   connection:
     filename: './chill.db'
+
+# PostgreSQL Database Configuration
+# connection:
+#   charset: 'utf8'
+#   database: chill
+#   host: 127.0.0.1
+#   user: PG_USER
+#   password: PG_PASSWORD
 
 restApi:
   port: 8000
