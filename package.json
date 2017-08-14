@@ -9,8 +9,10 @@
     "clean": "rimraf dist/",
     "babel": "babel src/ -d dist/",
     "build": "run-s lint clean babel",
+    "make:migration": "knex migrate:make",
     "migrate": "knex migrate:latest",
-    "rollback": "knex migrate:rollback"
+    "rollback": "knex migrate:rollback",
+    "synchronize": "babel-node ./src/scripts/synchronize"
   },
   "keywords": [
     "chill",
@@ -23,6 +25,7 @@
     "bookshelf": "^0.10.2",
     "bookshelf-camelcase": "^1.1.4",
     "boom": "^4.2.0",
+    "camelize": "^1.0.0",
     "compression": "^1.6.2",
     "cors": "^2.8.1",
     "express": "^4.14.1",
@@ -30,9 +33,11 @@
     "http-status-codes": "^1.0.6",
     "joi": "^10.1.0",
     "knex": "^0.12.6",
+    "lodash": "^4.17.4",
     "memory-cache": "^0.1.6",
     "morgan": "^1.7.0",
     "npm-run-all": "^4.0.2",
+    "pg": "^7.1.2",
     "serve-favicon": "^2.4.2",
     "sqlite3": "^3.1.8",
     "swagger-jsdoc": "^1.9.0",

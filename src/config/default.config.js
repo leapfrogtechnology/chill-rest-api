@@ -17,7 +17,7 @@ export default {
   db: {
     client: 'sqlite3',
     connection: {
-      filename: './chill.db'
+      filename: null
     },
     useNullAsDefault: true
   },

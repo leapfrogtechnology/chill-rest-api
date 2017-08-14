@@ -28,11 +28,12 @@ export function notFoundError(req, res, next) { // eslint-disable-line no-unused
  */
 export function genericErrorHandler(err, req, res, next) {  // eslint-disable-line no-unused-vars
   if (err.stack) {
-    logger.debug(err.stack);
+    logger().debug(err.stack);
   }
-  logger.error(err);
+
+  logger().error(err);
 
   let error = buildError(err);
 
-  res.status(error.code).json({ error });
+  res.status(error.code || HttpStatus.INTERNAL_SERVER_ERROR).json({ error });
 }

@@ -1,15 +1,14 @@
 import * as statusService from '../services/status';
 
 /**
- * Get the latest status of all the services.
+ * Get all the statuses.
  *
  * @param {Object} req
  * @param {Object} res
  * @param {Object} next
  */
-export function getStatus(req, res, next) {
-  statusService.fetchLatestStatuses()
+export function getAll(req, res, next) {
+  statusService.fetchAll()
     .then(data => res.json(data))
     .catch(err => next(err));
 }
-

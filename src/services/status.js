@@ -1,41 +1,39 @@
 import Boom from 'boom';
-import StatusLog from '../models/StatusLog';
+
+import logger from '../utils/logger';
+import Status from '../models/Status';
 
 /**
- * Get all status logs.
- *
- * @return {Promise}
- */
-export function getAllStatus() {
-  return StatusLog.fetchAll();
-}
-
-/**
- * Fetch a service grouped by it's name.
- *
- * @param  {String} id
- * @return {Promise}
- */
-export function fetchLatestStatuses() {
-  return StatusLog.fetchLatestStatuses();
-}
-
-/**
- * Get a service status logs.
+ * Fetch a single Status record by it's id (pk).
  *
  * @param  {string|Number}  id
  * @return {Promise}
  */
-export async function getStatus(id) {
-  try {
-    let status = await new StatusLog({ id }).fetch();
+export async function fetch(id) {
+  logger().debug('Fetching a status record by id', { id });
 
-    if (!status) {
-      throw new Boom.notFound('Service not found');
-    }
+  let result = await new Status({ id }).fetch();
 
-    return status;
-  } catch (err) {
-    throw new Boom.notFound('Internal Server Error');
+  if (!result) {
+    throw new Boom.notFound('Status not found');
   }
+
+  logger().debug('Retrieved Status data', result.toJSON());
+
+  return result;
+}
+
+/**
+ * Fetch all statuses.
+ *
+ * @return {Promise}
+ */
+export async function fetchAll() {
+  logger().info('Fetching all the statuses.');
+
+  let result = await Status.fetchAll();
+
+  logger().debug('Retrieved list of statuses', result.toJSON());
+
+  return result;
 }
