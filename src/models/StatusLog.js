@@ -1,3 +1,5 @@
+import camelize from 'camelize';
+
 import Status from './Status';
 import Service from './Service';
 import logger from '../utils/logger';
@@ -37,7 +39,7 @@ class StatusLog extends db.Model {
       statusLogQuery.STATUS_LOGS
     );
 
-    return results.rows;
+    return camelize(results.rows);
   }
 
   static async fetchLatestStatuses() {
@@ -47,7 +49,7 @@ class StatusLog extends db.Model {
       statusLogQuery.LATEST_STATUS
     );
 
-    return results.rows;
+    return camelize(results.rows);
   }
 }
 
