@@ -2,6 +2,7 @@ import Status from './Status';
 import Service from './Service';
 import logger from '../utils/logger';
 import { getClient } from '../utils/db';
+import * as statusLogQuery from '../queries/status';
 
 const db = getClient();
 const TABLE_NAME = 'status_logs';
@@ -29,33 +30,24 @@ class StatusLog extends db.Model {
     return new StatusLog({ serviceId }).orderBy('created_at', 'DESC').fetch();
   }
 
-  static fetchAllLogs() {
+  static async fetchAllLogs() {
     logger().info('Fetching all status logs');
 
-    return StatusLog
-      .collection()
-      .query(qb => qb.orderBy('created_at', 'DESC'))
-      .fetch({
-        debug: true,
-        withRelated: ['status', 'service']
-      })
-      .then(collection => collection.toJSON());
+    let results = await db.knex.raw(
+      statusLogQuery.STATUS_LOGS
+    );
+
+    return results.rows;
   }
 
-  static fetchLatestStatuses() {
+  static async fetchLatestStatuses() {
     logger().info('Fetching the latest status');
 
-    return StatusLog
-      .collection()
-      .query(qb =>
-        qb.groupBy('service_id')
-          .orderBy('created_at', 'DESC')
-      )
-      .fetch({
-        debug: true,
-        withRelated: ['status', 'service']
-      })
-      .then(collection => collection.toJSON());
+    let results = await db.knex.raw(
+      statusLogQuery.LATEST_STATUS
+    );
+
+    return results.rows;
   }
 }
 
