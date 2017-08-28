@@ -1,7 +1,7 @@
 // Project Controller
+import jwt from 'jsonwebtoken';
 import * as projectService from '../services/project';
 import * as userProjectService from '../services/userProject';
-import jwt from 'jsonwebtoken';
 
 /*
     Create a Project
@@ -17,7 +17,6 @@ export function create( req, res, next ) {
         projectId: data.id,
         userId: value.userId
       };
-      // res.json(userProjectData);
 
       userProjectService.create(userProjectData)
         .then(userprojectreturn =>{
@@ -73,7 +72,7 @@ export function showAll( req, res, next ) {
  * @param {Object} res
  * @param {Object} next
  */
-export function deleteProject( req , res , next ) {
+export function deleteProject( req, res, next ) {
   let head = req.headers.authorization.split(' ')[1];
   let value = jwt.decode(head);
   
@@ -89,11 +88,11 @@ export function deleteProject( req , res , next ) {
  * @param {Object} res
  * @param {Object} next
  */
-export function updateProject( req , res , next ) {
+export function updateProject( req, res, next ) {
   let head = req.headers.authorization.split(' ')[1];
   let value = jwt.decode(head);
 
-  projectService.updateProject( value.userId, req.params.projectid , req.body )
+  projectService.updateProject( value.userId, req.params.projectid, req.body )
     .then(data => res.json(data))
     .catch(err => next(err));
- }
+}

@@ -27,11 +27,6 @@ class Token extends db.Model {
     logger().info('Creating a new token entry');
     logger().debug('New Token entry', data);
 
-  //   try {
-  //   await token.save();
-  // } catch(e) {
-  //   console.log(e);
-  // }
     await token.save();
     
     logger().info('Token entered', { id: token.get('id') });

@@ -1,18 +1,12 @@
 // JWT
 import jwt from 'jsonwebtoken';
 
-/**
- *generate jwt tokens
- * 
- */
+// generate JWT tokens
 export function generateToken(userId, secret, time) {
   return jwt.sign({ userId }, secret, { expiresIn: time + 's' });
 }
 
-/**
- *verify the jwt token
- * 
- */
+// verify the JWT token
 export function verifyToken(token, secret) {
   return jwt.verify(token, secret);
 }

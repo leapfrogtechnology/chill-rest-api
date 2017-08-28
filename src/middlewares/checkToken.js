@@ -1,11 +1,10 @@
-import * as tokenServices from '../services/token';
 import jwt from 'jsonwebtoken';
+import * as tokenServices from '../services/token';
 
 /*
 to authenticate the access token
 */
 export async function authenticate( req, res, next) {
-  let token = req.headers.authorization;
   let head = req.headers.authorization.split(' ')[1];
   let value = jwt.verify(head, 'RESTFULAPI');
 

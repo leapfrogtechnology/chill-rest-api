@@ -9,6 +9,7 @@ import Status from '../models/Status';
  * @param  {string|Number}  id
  * @return {Promise}
  */
+ 
 export async function fetch(id) {
   logger().debug('Fetching a status record by id', { id });
 
@@ -25,9 +26,9 @@ export async function fetch(id) {
 
 /**
  * Fetch all statuses.
- *
  * @return {Promise}
  */
+
 export async function fetchAll() {
   logger().info('Fetching all the statuses.');
 

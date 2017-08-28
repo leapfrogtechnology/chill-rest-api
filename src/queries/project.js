@@ -23,16 +23,16 @@ export const DELETE_A_PROJECT_PROJECTS = (`
     Delete
     from projects
     where id=?
-    `)
+    `);
 
 export const DELETE_A_PROJECT_USERPROJECT = (`
     Delete
     from user_project
     where project_id=?
-    `)
+    `);
 
 export const UPDATE_A_PROJECT_PROJECTS = (`
     update projects
     set name = ? , description = ?
     where id = ?
-    `)
+    `);

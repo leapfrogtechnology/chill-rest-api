@@ -1,9 +1,9 @@
 // Project model
+import Boom from 'Boom';
 import camelize from 'camelize';
 import logger from '../utils/logger';
 import { getClient } from '../utils/db';
 import * as projectQuery from '../queries/project';
-import Boom from 'Boom';
 
 const db = getClient();
 
@@ -60,48 +60,53 @@ class Project extends db.Model {
     return camelize(results.rows);
   }
 
-  static async deleteProject(userId,projectId) {
-      logger().info('Deleting a project of user' , {userId},'where projectId is',{projectId});
-      let results = await db.knex.raw(
-        projectQuery.FETCH_A_PROJECT,[userId,projectId]
+  static async deleteProject(userId, projectId) {
+    logger().info('Deleting a project of user', { userId }, 'where projectId is', { projectId });
+    let results = await db.knex.raw(
+        projectQuery.FETCH_A_PROJECT, [userId, projectId]
       );
-      //console.log(results);
-      if(results.rowCount == 0) {
-        throw new Boom.notFound('No Project Found')
-      }
+      // console.log(results);
 
-      let deleteFromUserProjectTable = await db.knex.raw(
-        projectQuery.DELETE_A_PROJECT_USERPROJECT,[projectId]
-      );
-
-      let deleteFromProjectTable = await db.knex.raw(
-        projectQuery.DELETE_A_PROJECT_PROJECTS,[projectId]
-      );
-      logger().info('project deleted');
-      return camelize(results.rows);
+    if (results.rowCount === 0) {
+      throw new Boom.notFound('No Project Found');
     }
+
+    await db.knex.raw(
+        projectQuery.DELETE_A_PROJECT_USERPROJECT, [projectId]
+      );
+
+    await db.knex.raw(
+        projectQuery.DELETE_A_PROJECT_PROJECTS, [projectId]
+      );
+
+    logger().info('project deleted');
+    
+    return camelize(results.rows);
+  }
     
 
-  static async updateProject(userId,projectId,data) {
-      logger().info('Updating a project of user' , {userId},'where projectId is',{projectId});
-      let results = await db.knex.raw(
-        projectQuery.FETCH_A_PROJECT,[userId,projectId]
+  static async updateProject(userId, projectId, data) {
+    logger().info('Updating a project of user', { userId }, 'where projectId is', { projectId });
+    let results = await db.knex.raw(
+        projectQuery.FETCH_A_PROJECT, [userId, projectId]
       );
-      //console.log(results);
-      if(results.rowCount == 0) {
-        throw new Boom.notFound('No Project Found')
-      }
+      // console.log(results);
 
-      let updateProject = await db.knex.raw(
-        projectQuery.UPDATE_A_PROJECT_PROJECTS,[ data.name , data.description , projectId ]
-      );
-      let updatedResult = await db.knex.raw(
-        projectQuery.FETCH_A_PROJECT,[userId,projectId]
-      );
-
-      logger().info('project updated');
-      return camelize(updatedResult.rows);
+    if (results.rowCount === 0) {
+      throw new Boom.notFound('No Project Found');
     }
+
+    await db.knex.raw(
+        projectQuery.UPDATE_A_PROJECT_PROJECTS, [ data.name, data.description, projectId ]
+      );
+    let updatedResult = await db.knex.raw(
+        projectQuery.FETCH_A_PROJECT, [userId, projectId]
+      );
+
+    logger().info('project updated');
+    
+    return camelize(updatedResult.rows);
+  }
 }
 
 
