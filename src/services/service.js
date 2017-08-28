@@ -1,5 +1,4 @@
 import Boom from 'boom';
-
 import logger from '../utils/logger';
 import Service from '../models/Service';
 import StatusLog from '../models/StatusLog';

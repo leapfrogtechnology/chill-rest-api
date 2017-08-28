@@ -13,6 +13,12 @@ import * as errorHandler from './middlewares/errorHandler';
 
 const app = express();
 
+import passport from 'passport';
+import passportConfig from './config/passport';
+
+
+passportConfig(passport);
+
 app.set('port', config.get().restApi.port);
 
 app.locals.title = pkg.name;
