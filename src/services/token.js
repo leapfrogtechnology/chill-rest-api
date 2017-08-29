@@ -2,6 +2,8 @@ import jwt from 'jsonwebtoken';
 import Token from '../models/Token';
 import logger from '../utils/logger';
 import * as generateTokens from '../jwt';
+const AUTHORIZATION_SALT_KEY='CHILL_RESTFULAPI';
+const REFRESH_TOKEN_SALT_KEY='CHILL_REFRESH';
 
 
 export async function createToken(data) {
@@ -42,12 +44,10 @@ export async function generateAccessToken(refresh_token) {
     let result = await fetchToken(refresh_token);
     let refreshToken = result.refresh_token;
 
-    jwt.verify(refreshToken, 'REFRESH');
+    jwt.verify(refreshToken, REFRESH_TOKEN_SALT_KEY);
     if (result) {
-      let accessToken = generateTokens.generateToken(result.user_id, 'RESTFULAPI', 300);
-
-      
-      return ({ accessToken });
+      let accessToken = generateTokens.generateToken(result.user_id, AUTHORIZATION_SALT_KEY, 300);
+       return ({ accessToken });
     }
   }
   catch (err) {

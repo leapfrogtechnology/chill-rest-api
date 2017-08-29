@@ -12,11 +12,11 @@ module.exports = function(passport) {
   
   function(accessToken, refreshToken, profile, done) {
     let data = {
-      'id': profile.id,
-      'accessToken': accessToken,
-      'name': profile.displayName,
-      'email': profile.emails[0].value,
-      'image': profile._json.image.url
+      id: profile.id,
+      accessToken: accessToken,
+      name: profile.displayName,
+      email: profile.emails[0].value,
+      image: profile._json.image.url
     };
         
     return done(null, data);
