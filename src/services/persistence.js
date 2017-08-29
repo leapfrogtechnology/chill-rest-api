@@ -1,6 +1,5 @@
-import { differenceWith } from 'lodash';
-
 import logger from '../utils/logger';
+import { differenceWith } from 'lodash';
 import Service from '../models/Service';
 import * as config from '../config/config';
 import * as serviceService from './service';

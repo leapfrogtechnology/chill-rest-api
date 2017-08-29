@@ -11,6 +11,8 @@ export async function create( data ) {
     
   try {
     let project = await Project.create(data);
+
+    
     return project.toJSON();
   } 
   catch (err) {

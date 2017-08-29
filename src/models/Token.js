@@ -28,9 +28,8 @@ class Token extends db.Model {
     logger().debug('New Token entry', data);
 
     await token.save();
-    
     logger().info('Token entered', { id: token.get('id') });
-
+    
     return token;
   }
 }

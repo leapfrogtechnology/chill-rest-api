@@ -5,6 +5,7 @@ export function up(knex) {
     table.increments().primary();
     table.string('name').notNullable();
     table.string('url').unique().notNullable();
+    table.integer('project_id').references('id').inTable('projects').notNullable();
     // Type of the service.
     table.enum('type', [TYPE_HTTP, TYPE_TCP]).defaultTo(TYPE_HTTP);
     table.timestamp('created_at');

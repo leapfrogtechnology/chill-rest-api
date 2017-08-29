@@ -4,39 +4,36 @@ import Service from '../models/Service';
 import StatusLog from '../models/StatusLog';
 
 /**
- * Fetch all services.
+ * Fetch all services of user.
  *
  * @return {Promise}
  */
-export async function fetchAll() {
-  logger().info('Fetching all the services.');
-
-  let result = await Service.fetchAll();
-
-  logger().debug('Retrieved list of services', result.toJSON());
-
-  return result;
+export async function fetchAll(id) {
+  return Service.fetchAll(id);
 }
+
 
 /**
  * Fetch a single service by it's id (pk).
  *
+ * @param  {string|Number}  projectId, serviceId
+ * @return {Promise}
+ */
+export async function fetch(projectid, serviceid) {
+  return Service.get( projectid, serviceid );
+}
+
+/**
+ * delete a single service by it's projectId.
+ *
  * @param  {string|Number}  id
  * @return {Promise}
  */
-export async function fetch(id) {
-  logger().debug('Fetching a service by id', { id });
-
-  let result = await new Service({ id }).fetch();
-
-  if (!result) {
-    throw new Boom.notFound('Service not found');
-  }
-
-  logger().debug('Retrieved service data', result.toJSON());
-
-  return result;
+export async function deleteService( projectId, serviceId ) {
+  return Service.deleteService( projectId, serviceId );
 }
+
+
 
 /**
  * Fetch the latest status change log for a service by serviceId.
@@ -72,3 +69,13 @@ export async function create(data) {
   }
 }
 
+
+/**
+ * Update and save service data.
+ *
+ * @param {Object}
+ * @returns {Promise}
+ */
+export async function updateService(projectId, serviceId, data) {
+  return Service.updateService(projectId, serviceId, data);
+}

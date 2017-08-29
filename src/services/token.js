@@ -16,6 +16,8 @@ export async function createToken(data) {
 export async function fetchToken(refresh_token) {
   try {
     let result = await new Token({ refresh_token }).fetch();
+
+    
     return result;
   }
   catch (err) {
@@ -26,6 +28,8 @@ export async function fetchToken(refresh_token) {
 export async function checkToken(user_id) {
   try {
     let result = await new Token({ user_id }).fetch();  
+
+    
     return result;
   }
   catch (err) {
@@ -37,9 +41,12 @@ export async function generateAccessToken(refresh_token) {
   try {
     let result = await fetchToken(refresh_token);
     let refreshToken = result.refresh_token;
+
     jwt.verify(refreshToken, 'REFRESH');
     if (result) {
       let accessToken = generateTokens.generateToken(result.user_id, 'RESTFULAPI', 300);
+
+      
       return ({ accessToken });
     }
   }

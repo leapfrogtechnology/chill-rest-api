@@ -1,4 +1,5 @@
 import Boom from 'boom';
+import jwt from 'jsonwebtoken';
 import User from '../models/User';
 import logger from '../utils/logger';
 import * as tokenService from './token';
@@ -37,10 +38,25 @@ export async function loginOrSignUp(data) {
       let id = userInfo.id;
       let tokenData = await tokenService.checkToken(id);    
       let refreshToken = tokenData.attributes.refreshToken;
+      let divisor = Date.now() / 1000;
+      let expiryTime = jwt.decode(refreshToken).exp;
 
-      logger().debug('Retrieved user data', userInfo.toJSON());
+      if (expiryTime > divisor) {
+        return ({ accessToken, refreshToken });
+        // logger().debug('Retrieved user data', userInfo.toJSON());
+      }
+      else {
+        let refreshToken = generateTokens.generateToken(userInfo.id, 'REFRESH', 172800);
+        let tokenTable = {
+          userId: userInfo.id,
+          refreshToken: refreshToken
+        };
+
+        tokenService.createToken(tokenTable);
+        
+        return ({ accessToken, refreshToken });
+      }
       
-      return ({ accessToken, refreshToken });
     }
     else {
       await createUser(data);
@@ -48,8 +64,8 @@ export async function loginOrSignUp(data) {
       let accessToken = generateTokens.generateToken(userInfo.id, 'RESTFULAPI', 300);
       let refreshToken = generateTokens.generateToken(userInfo.id, 'REFRESH', 172800);
       let tokenTable = {
-        refreshToken: refreshToken,
-        userId: userInfo.id
+        userId: userInfo.id,
+        refreshToken: refreshToken
       };
 
       tokenService.createToken(tokenTable);

@@ -4,7 +4,7 @@ import * as tokenServices from '../services/token';
 /*
 to authenticate the access token
 */
-export async function authenticate( req, res, next) {
+export async function authenticate(req, res, next) {
   let head = req.headers.authorization.split(' ')[1];
   let value = jwt.verify(head, 'RESTFULAPI');
 
@@ -12,31 +12,35 @@ export async function authenticate( req, res, next) {
     res.json({
       message: 'The given token is invalid.'
     });
+
+    return;
   }
-  if (value) {
-    next();
-  }
+
+  next();
 }
 
 /*
 to authenticate the refresh token
 */
-export async function authenticateRefreshToken( req, res, next) {
+export async function authenticateRefreshToken(req, res, next) {
   const userId = req.params.userId;
 
-  let tokenData = tokenServices.fetchToken(userId);
-
-  if (tokenData) {
+  try {
+    let tokenData = await tokenServices.fetchToken(userId);
     let refreshToken = tokenData.refresh_token;
-    let value = jwt.verify(refreshToken, 'REFRESH');
 
-    if (value) {
-      next();
-    }
-    else {
+    if (!refreshToken) {
       res.json({
         message: 'The refresh token provided is no longer valid.'
       });
+
+      return;
     }
+    
+    jwt.verify(refreshToken, 'REFRESH');
+    
+    return next();
+  } catch (err) {
+    return next(err);
   }
 }

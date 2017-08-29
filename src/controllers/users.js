@@ -15,8 +15,7 @@ fetch a user from id
 export function get( req, res, next) {
   userService.fetchById(req.params.id)
     .then(data => res.json(data))
-    .catch(err => next(err));
-        
+    .catch(err => next(err));       
 }
 
 /*
