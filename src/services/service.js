@@ -8,8 +8,8 @@ import StatusLog from '../models/StatusLog';
  *
  * @return {Promise}
  */
-export async function fetchAll(id) {
-  return Service.fetchAll(id);
+export async function fetchAll( id ,  userId ) {
+  return Service.fetchAll( id ,userId );
 }
 
 
@@ -19,8 +19,8 @@ export async function fetchAll(id) {
  * @param  {string|Number}  projectId, serviceId
  * @return {Promise}
  */
-export async function fetch(projectid, serviceid) {
-  return Service.get( projectid, serviceid );
+export async function fetch( projectid, serviceid , userId ) {
+  return Service.get( projectid, serviceid , userId );
 }
 
 /**
@@ -29,8 +29,8 @@ export async function fetch(projectid, serviceid) {
  * @param  {string|Number}  id
  * @return {Promise}
  */
-export async function deleteService( projectId, serviceId ) {
-  return Service.deleteService( projectId, serviceId );
+export async function deleteService( projectId, serviceId ,userId ) {
+  return Service.deleteService( projectId, serviceId ,userId );
 }
 
 
@@ -76,6 +76,6 @@ export async function create(data) {
  * @param {Object}
  * @returns {Promise}
  */
-export async function updateService(projectId, serviceId, data) {
-  return Service.updateService(projectId, serviceId, data);
+export async function updateService( projectId, serviceId, data , userId ) {
+  return Service.updateService( projectId, serviceId, data ,userId );
 }

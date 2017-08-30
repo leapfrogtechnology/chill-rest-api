@@ -25,8 +25,14 @@ router.get('/status', statusLogController.getLatestStatus);
 router.get('/status/logs', statusLogController.getAll);
 router.post('/status/logs', validateStatusLog, statusLogController.save);
 
-router.post('/self/projects/:id/services', authenticate.authenticate, serviceController.create);
+router.get('/self/projects', authenticate.authenticate, projectController.showAll);
+router.post('/self/projects', authenticate.authenticate, projectController.create);
+router.get('/self/projects/:projectid', authenticate.authenticate, projectController.get);
+router.put('/self/projects/:projectid', authenticate.authenticate, projectController.updateProject);
+router.delete('/self/projects/:projectid', authenticate.authenticate, projectController.deleteProject);
+
 router.get('/self/projects/:id/services', authenticate.authenticate, serviceController.getAll);
+router.post('/self/projects/:id/services', authenticate.authenticate, serviceController.create);
 router.get('/self/projects/:id/services/:serviceid', authenticate.authenticate, serviceController.get);
 router.put('/self/projects/:projectid/services/:serviceid', authenticate.authenticate, serviceController.updateService);
 router.delete('/self/projects/:projectid/services/:serviceid', authenticate.authenticate, serviceController.deleteService);
@@ -37,10 +43,5 @@ router.get('/services/:id(\\d+)/status', serviceController.getServiceStatus);
 router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 router.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), userController.loginOrSignUp);
 
-router.get('/self/projects', authenticate.authenticate, projectController.showAll);
-router.post('/self/projects', authenticate.authenticate, projectController.create);
-router.get('/self/projects/:projectid', authenticate.authenticate, projectController.get);
-router.put('/self/projects/:projectid', authenticate.authenticate, projectController.updateProject);
-router.delete('/self/projects/:projectid', authenticate.authenticate, projectController.deleteProject);
 
 export default router;

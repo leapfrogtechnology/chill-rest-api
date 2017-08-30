@@ -65,7 +65,6 @@ class Project extends db.Model {
     let results = await db.knex.raw(
         projectQuery.FETCH_A_PROJECT, [userId, projectId]
       );
-      // console.log(results);
 
     if (results.rowCount === 0) {
       throw new Boom.notFound('No Project Found');

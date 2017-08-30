@@ -4,6 +4,8 @@ import User from '../models/User';
 import logger from '../utils/logger';
 import * as tokenService from './token';
 import * as generateTokens from '../jwt';
+const AUTHORIZATION_SALT_KEY = 'CHILL_RESTFULAPI';
+const REFRESHTOKEN_SALT_KEY = 'CHILL_REFRESH';
 
 /**
  * Create new user in database.
@@ -34,7 +36,7 @@ export async function loginOrSignUp(data) {
     let userInfo = await fetchByEmail(email);
 
     if (userInfo) {
-      let accessToken = generateTokens.generateToken(userInfo.id, 'RESTFULAPI', 300);
+      let accessToken = generateTokens.generateToken(userInfo.id, AUTHORIZATION_SALT_KEY, 30000);
       let id = userInfo.id;
       let tokenData = await tokenService.checkToken(id);    
       let refreshToken = tokenData.attributes.refreshToken;
@@ -46,7 +48,7 @@ export async function loginOrSignUp(data) {
         // logger().debug('Retrieved user data', userInfo.toJSON());
       }
       else {
-        let refreshToken = generateTokens.generateToken(userInfo.id, 'REFRESH', 172800);
+        let refreshToken = generateTokens.generateToken(userInfo.id, REFRESHTOKEN_SALT_KEY, 172800);
         let tokenTable = {
           userId: userInfo.id,
           refreshToken: refreshToken
@@ -61,8 +63,8 @@ export async function loginOrSignUp(data) {
     else {
       await createUser(data);
       let userInfo = await fetchByEmail(data.email);
-      let accessToken = generateTokens.generateToken(userInfo.id, 'RESTFULAPI', 300);
-      let refreshToken = generateTokens.generateToken(userInfo.id, 'REFRESH', 172800);
+      let accessToken = generateTokens.generateToken(userInfo.id, AUTHORIZATION_SALT_KEY, 300);
+      let refreshToken = generateTokens.generateToken(userInfo.id, REFRESHTOKEN_SALT_KEY, 172800);
       let tokenTable = {
         userId: userInfo.id,
         refreshToken: refreshToken
@@ -87,7 +89,7 @@ export async function loginOrSignUp(data) {
 export async function fetchByEmail(email) {
   logger().debug('Fetching a user by email', { email });
   try {
-    let result = await new User({ email }).fetch();
+    let result = await new User({ email }).fetch();    
 
     
     return result;

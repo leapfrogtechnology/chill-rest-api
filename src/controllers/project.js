@@ -1,5 +1,3 @@
-// Project Controller
-import jwt from 'jsonwebtoken';
 import * as projectService from '../services/project';
 import * as userProjectService from '../services/userProject';
 
@@ -10,12 +8,9 @@ import * as userProjectService from '../services/userProject';
 export function create( req, res, next ) {
   projectService.create( req.body )
     .then(data =>{
-            // Call userproject service to map user and project
-      let head = req.headers.authorization.split(' ')[1];
-      let value = jwt.decode(head);
-      let userProjectData = {
+       let userProjectData = {
         projectId: data.id,
-        userId: value.userId
+        userId: req.userId
       };
 
       userProjectService.create(userProjectData)
@@ -39,10 +34,7 @@ export function create( req, res, next ) {
  * @param {Object} next
  */
 export function get(req, res, next) {
-  let head = req.headers.authorization.split(' ')[1];
-  let value = jwt.decode(head);
-
-  projectService.fetch(value.userId, req.params.projectid)
+  projectService.fetch(req.userId, req.params.projectid)
     .then(data => res.json(data))
     .catch(err => next(err));
 }
@@ -56,10 +48,7 @@ export function get(req, res, next) {
  */
 
 export function showAll( req, res, next ) {
-  let head = req.headers.authorization.split(' ')[1];
-  let value = jwt.decode(head);
-
-  projectService.fetchAll(value.userId)
+  projectService.fetchAll(req.userId)
     .then(data => res.json(data))
     .catch(err => next(err));
 }
@@ -73,10 +62,7 @@ export function showAll( req, res, next ) {
  * @param {Object} next
  */
 export function deleteProject( req, res, next ) {
-  let head = req.headers.authorization.split(' ')[1];
-  let value = jwt.decode(head);
-  
-  projectService.deleteProject(value.userId, req.params.projectid )
+  projectService.deleteProject(req.userId, req.params.projectid )
     .then(data => res.json(data))
     .catch(err => next(err));
 }
@@ -89,10 +75,7 @@ export function deleteProject( req, res, next ) {
  * @param {Object} next
  */
 export function updateProject( req, res, next ) {
-  let head = req.headers.authorization.split(' ')[1];
-  let value = jwt.decode(head);
-
-  projectService.updateProject( value.userId, req.params.projectid, req.body )
+ projectService.updateProject( req.userId, req.params.projectid, req.body )
     .then(data => res.json(data))
     .catch(err => next(err));
 }
