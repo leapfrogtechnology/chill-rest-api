@@ -8,7 +8,7 @@ import * as userProjectService from '../services/userProject';
 export function create( req, res, next ) {
   projectService.create( req.body )
     .then(data =>{
-       let userProjectData = {
+      let userProjectData = {
         projectId: data.id,
         userId: req.userId
       };
@@ -34,6 +34,7 @@ export function create( req, res, next ) {
  * @param {Object} next
  */
 export function get(req, res, next) {
+
   projectService.fetch(req.userId, req.params.projectid)
     .then(data => res.json(data))
     .catch(err => next(err));
@@ -75,7 +76,7 @@ export function deleteProject( req, res, next ) {
  * @param {Object} next
  */
 export function updateProject( req, res, next ) {
- projectService.updateProject( req.userId, req.params.projectid, req.body )
+  projectService.updateProject( req.userId, req.params.projectid, req.body )
     .then(data => res.json(data))
     .catch(err => next(err));
 }

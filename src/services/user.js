@@ -4,9 +4,14 @@ import User from '../models/User';
 import logger from '../utils/logger';
 import * as tokenService from './token';
 import * as generateTokens from '../jwt';
+<<<<<<< HEAD
 const AUTHORIZATION_SALT_KEY = 'CHILL_RESTFULAPI';
 const REFRESHTOKEN_SALT_KEY = 'CHILL_REFRESH';
 
+=======
+const AUTHORIZATION_SALT_KEY='CHILL_RESTFULAPI';
+const REFRESH_TOKEN_SALT_KEY='CHILL_REFRESH';
+>>>>>>> cbcd7170f2a804780b7ba4f13f672ac2d7d06dc1
 /**
  * Create new user in database.
  *
@@ -36,7 +41,11 @@ export async function loginOrSignUp(data) {
     let userInfo = await fetchByEmail(email);
 
     if (userInfo) {
+<<<<<<< HEAD
       let accessToken = generateTokens.generateToken(userInfo.id, AUTHORIZATION_SALT_KEY, 30000);
+=======
+      let accessToken = generateTokens.generateToken(userInfo.id, AUTHORIZATION_SALT_KEY, 300);
+>>>>>>> cbcd7170f2a804780b7ba4f13f672ac2d7d06dc1
       let id = userInfo.id;
       let tokenData = await tokenService.checkToken(id);    
       let refreshToken = tokenData.attributes.refreshToken;
@@ -48,7 +57,11 @@ export async function loginOrSignUp(data) {
         // logger().debug('Retrieved user data', userInfo.toJSON());
       }
       else {
+<<<<<<< HEAD
         let refreshToken = generateTokens.generateToken(userInfo.id, REFRESHTOKEN_SALT_KEY, 172800);
+=======
+        let refreshToken = generateTokens.generateToken(userInfo.id, REFRESH_TOKEN_SALT_KEY, 172800);
+>>>>>>> cbcd7170f2a804780b7ba4f13f672ac2d7d06dc1
         let tokenTable = {
           userId: userInfo.id,
           refreshToken: refreshToken
@@ -64,7 +77,11 @@ export async function loginOrSignUp(data) {
       await createUser(data);
       let userInfo = await fetchByEmail(data.email);
       let accessToken = generateTokens.generateToken(userInfo.id, AUTHORIZATION_SALT_KEY, 300);
+<<<<<<< HEAD
       let refreshToken = generateTokens.generateToken(userInfo.id, REFRESHTOKEN_SALT_KEY, 172800);
+=======
+      let refreshToken = generateTokens.generateToken(userInfo.id, REFRESH_TOKEN_SALT_KEY, 172800);
+>>>>>>> cbcd7170f2a804780b7ba4f13f672ac2d7d06dc1
       let tokenTable = {
         userId: userInfo.id,
         refreshToken: refreshToken
