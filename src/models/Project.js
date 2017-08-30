@@ -1,4 +1,3 @@
-// Project model
 import Boom from 'Boom';
 import camelize from 'camelize';
 import logger from '../utils/logger';
@@ -7,7 +6,6 @@ import * as projectQuery from '../queries/project';
 
 const db = getClient();
 
-// Service types
 export const TYPE_HTTP = 'http';
 export const TYPE_TCP = 'tcp';
 
@@ -89,8 +87,6 @@ class Project extends db.Model {
     let results = await db.knex.raw(
         projectQuery.FETCH_A_PROJECT, [userId, projectId]
       );
-      // console.log(results);
-
     if (results.rowCount === 0) {
       throw new Boom.notFound('No Project Found');
     }

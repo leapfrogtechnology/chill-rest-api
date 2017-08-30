@@ -1,11 +1,8 @@
-// User dao
-
 import logger from '../utils/logger';
 import { getClient } from '../utils/db';
 
 const db = getClient();
 
-// Service types
 export const TYPE_HTTP = 'http';
 export const TYPE_TCP = 'tcp';
 

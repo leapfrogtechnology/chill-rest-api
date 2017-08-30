@@ -7,7 +7,6 @@ import * as userProjectQuery from '../queries/userProject';
 
 const db = getClient();
 
-// Service types
 export const TYPE_HTTP = 'http';
 export const TYPE_TCP = 'tcp';
 

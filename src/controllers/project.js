@@ -1,20 +1,24 @@
 import * as projectService from '../services/project';
 import * as userProjectService from '../services/userProject';
 
-/*
-    Create a Project
-    Returns the project json
+/** 
+ * Create a Project
+ * Returns the project json.
+ * 
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Object} next
 */
-export function create( req, res, next ) {
-  projectService.create( req.body )
-    .then(data =>{
+export function create(req, res, next) {
+  projectService.create(req.body)
+    .then(data => {
       let userProjectData = {
         projectId: data.id,
         userId: req.userId
       };
 
       userProjectService.create(userProjectData)
-        .then(userprojectreturn =>{
+        .then(userprojectreturn => {
           let totalData = {
             projectData: data,
             userProjectData: userprojectreturn
@@ -48,7 +52,7 @@ export function get(req, res, next) {
  * @param {Object} next
  */
 
-export function showAll( req, res, next ) {
+export function showAll(req, res, next) {
   projectService.fetchAll(req.userId)
     .then(data => res.json(data))
     .catch(err => next(err));
@@ -62,8 +66,8 @@ export function showAll( req, res, next ) {
  * @param {Object} res
  * @param {Object} next
  */
-export function deleteProject( req, res, next ) {
-  projectService.deleteProject(req.userId, req.params.projectid )
+export function deleteProject(req, res, next) {
+  projectService.deleteProject(req.userId, req.params.projectid)
     .then(data => res.json(data))
     .catch(err => next(err));
 }
@@ -75,8 +79,8 @@ export function deleteProject( req, res, next ) {
  * @param {Object} res
  * @param {Object} next
  */
-export function updateProject( req, res, next ) {
-  projectService.updateProject( req.userId, req.params.projectid, req.body )
+export function updateProject(req, res, next) {
+  projectService.updateProject(req.userId, req.params.projectid, req.body)
     .then(data => res.json(data))
     .catch(err => next(err));
 }
