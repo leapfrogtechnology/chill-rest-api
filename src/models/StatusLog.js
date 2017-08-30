@@ -2,6 +2,7 @@ import Status from './Status';
 import Service from './Service';
 import logger from '../utils/logger';
 import { getClient } from '../utils/db';
+import * as statusQuery from '../queries/status';
 
 const db = getClient();
 const TABLE_NAME = 'status_logs';

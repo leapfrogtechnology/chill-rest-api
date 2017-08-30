@@ -39,7 +39,7 @@ export function get(req, res, next) {
  * @param {Object} next
  */
 export function getServiceStatus(req, res, next) {
-  serviceService.fetchStatus(req.params.id)
+  serviceService.fetchStatus(req.params.id, req.params.serviceid, req.userId)
     .then(data => res.json(data))
     .catch(err => next(err));
 }

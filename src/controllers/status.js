@@ -8,7 +8,7 @@ import * as statusService from '../services/status';
  * @param {Object} next
  */
 export function getAll(req, res, next) {
-  statusService.fetchAll()
+  statusService.fetchAll(projectId, serviceId, userId)
     .then(data => res.json(data))
     .catch(err => next(err));
 }

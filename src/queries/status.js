@@ -34,3 +34,5 @@ export const STATUS_LOGS = (`
   INNER JOIN statuses st ON st.id = sl.status_id
   ORDER BY sl.created_at DESC
 `);
+
+

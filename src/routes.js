@@ -32,7 +32,7 @@ router.put('/self/projects/:projectid/services/:serviceid', authenticate.authent
 router.delete('/self/projects/:projectid/services/:serviceid', authenticate.authenticate, serviceController.deleteService);
 
 router.get('/statuses', statusController.getAll);
-router.get('/services/:id(\\d+)/status', serviceController.getServiceStatus);
+router.get('/status', serviceController.getServiceStatus);
 
 router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 router.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), userController.loginOrSignUp);

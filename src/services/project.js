@@ -7,19 +7,17 @@ import Project from '../models/Project';
  * @param {Object}
  * @returns {Promise}
  */
-export async function create( data ) {
-    
+export async function create(data) {
+
   try {
     let project = await Project.create(data);
 
-    
     return project.toJSON();
-  } 
+  }
   catch (err) {
     logger().error('Error while persisting the project into database', err);
   }
 }
-
 
 /**
  * Fetch all projects of a user.
@@ -31,16 +29,15 @@ export async function fetchAll(id) {
   return Project.fetchAll(id);
 }
 
- /**
- * Fetch a project from projectId.
- *
- * @param  {string|Number}  id
- * @return {Promise}
- */
+/**
+* Fetch a project from projectId.
+*
+* @param  {string|Number}  id
+* @return {Promise}
+*/
 export async function fetch(userId, ProjectId) {
   return Project.fetchAProject(userId, ProjectId);
 }
-
 
 /**
  * Delete a project from projectId.
@@ -59,7 +56,7 @@ export async function deleteProject(userId, projectId) {
  * @return {Promise}
  */
 export async function updateProject(userId, projectId, data) {
-     // return Project.updateProject(userId,projectId,req.body);
-     // console.log(data);
+  // return Project.updateProject(userId,projectId,req.body);
+  // console.log(data);
   return Project.updateProject(userId, projectId, data);
 }

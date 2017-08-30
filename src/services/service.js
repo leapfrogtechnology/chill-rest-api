@@ -12,7 +12,6 @@ export async function fetchAll(id) {
   return Service.fetchAll(id);
 }
 
-
 /**
  * Fetch a single service by it's id (pk).
  *
@@ -32,8 +31,6 @@ export async function fetch(projectid, serviceid) {
 export async function deleteService( projectId, serviceId ) {
   return Service.deleteService( projectId, serviceId );
 }
-
-
 
 /**
  * Fetch the latest status change log for a service by serviceId.

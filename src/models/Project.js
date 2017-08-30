@@ -65,7 +65,6 @@ class Project extends db.Model {
     let results = await db.knex.raw(
         projectQuery.FETCH_A_PROJECT, [userId, projectId]
       );
-      // console.log(results);
 
     if (results.rowCount === 0) {
       throw new Boom.notFound('No Project Found');
@@ -84,7 +83,6 @@ class Project extends db.Model {
     return camelize(results.rows);
   }
     
-
   static async updateProject(userId, projectId, data) {
     logger().info('Updating a project of user', { userId }, 'where projectId is', { projectId });
     let results = await db.knex.raw(
@@ -108,7 +106,5 @@ class Project extends db.Model {
     return camelize(updatedResult.rows);
   }
 }
-
-
 
 export default Project;

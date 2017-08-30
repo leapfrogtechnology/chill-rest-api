@@ -1,5 +1,4 @@
 // Project Controller
-import jwt from 'jsonwebtoken';
 import * as projectService from '../services/project';
 import * as userProjectService from '../services/userProject';
 

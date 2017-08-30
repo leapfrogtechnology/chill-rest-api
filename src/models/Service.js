@@ -48,7 +48,7 @@ class Service extends db.Model {
     let results = await db.knex.raw(
       serviceQuery.FETCH_All_SERVICE, [id]
     );
-
+    
     
     return camelize(results.rows);
   }
