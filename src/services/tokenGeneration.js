@@ -1,6 +1,6 @@
 import * as generateTokens from '../jwt';
-const AUTHORIZATION_SALT_KEY='CHILL_RESTFULAPI';
-const REFRESH_TOKEN_SALT_KEY='CHILL_REFRESH';
+const AUTHORIZATION_SALT_KEY = 'CHILL_RESTFULAPI';
+const REFRESH_TOKEN_SALT_KEY = 'CHILL_REFRESH';
 
 export async function provideToken(id) {
   return new Promise((resolve)=>{
