@@ -1,18 +1,18 @@
-import Boom from 'Boom';
-import camelize from 'camelize';
-import logger from '../utils/logger';
-import { getClient } from '../utils/db';
-import * as serviceQuery from '../queries/service';
-import * as userProjectQuery from '../queries/userProject';
+import Boom from "Boom";
+import camelize from "camelize";
+import logger from "../utils/logger";
+import { getClient } from "../utils/db";
+import * as serviceQuery from "../queries/service";
+import * as userProjectQuery from "../queries/userProject";
 
 const db = getClient();
 
-export const TYPE_HTTP = 'http';
-export const TYPE_TCP = 'tcp';
+export const TYPE_HTTP = "http";
+export const TYPE_TCP = "tcp";
 
 class Service extends db.Model {
   get tableName() {
-    return 'services';
+    return "services";
   }
 
   get hasTimestamps() {
@@ -33,134 +33,152 @@ class Service extends db.Model {
       type: data.type
     });
 
-    logger().info('Creating a new service');
-    logger().debug('Service data', data);
+    logger().info("Creating a new service");
+    logger().debug("Service data", data);
 
     await service.save();
 
-    logger().info('Service created', { id: service.get('id') });
+    logger().info("Service created", { id: service.get("id") });
 
     return service;
   }
 
-  static async fetchAll(id, userId) {
-    logger().info('checking if user has the project', { id });
+  static async fetchAll(projectId, userId) {
+    logger().info("checking if user has the project", { projectId });
     let ifMatch;
 
     try {
-      ifMatch = await db.knex.raw(
-        userProjectQuery.CHECK_USER_PROJECT, [userId, id]
-      );
+      ifMatch = await db.knex.raw(userProjectQuery.CHECK_USER_PROJECT, {
+        userId,
+        projectId
+      });
     } catch (err) {
-      logger().error('Error while persisting the service into database', err);
+      logger().error("Error while persisting the service into database", err);
     }
 
     if (ifMatch.rowCount != 0) {
-      logger().info('Fetching the services of projects of project id', { id });
-      let results = await db.knex.raw(
-        serviceQuery.FETCH_All_SERVICE, [id]
-      );
+      logger().info("Fetching the services of projects of project id", {
+        projectId
+      });
+      let results = await db.knex.raw(serviceQuery.FETCH_All_SERVICE, {
+        projectId
+      });
 
-      
       return camelize(results.rows);
-    }
-    else {
-      throw new Boom.notFound('User and Project are not related');
-    }
-  }
-
-  static async get( projectId, serviceId, userId ) {
-    logger().info('checking if user has the project');
-    let ifMatch;
-
-    try {
-      ifMatch = await db.knex.raw(
-        userProjectQuery.CHECK_USER_PROJECT, [userId, projectId]
-      );
-    } catch (err) {
-      logger().error('Error while persisting the service into database', err);
-    }
-    if (ifMatch.rowCount != 0) {
-      logger().info('Fetching the service', { serviceId });
-      let results = await db.knex.raw(
-        serviceQuery.FETCH_A_SERVICE, [serviceId, projectId]
-      ); 
-
-      
-      return camelize(results.rows);  
-    }
-    else {
-      throw new Boom.notFound('User and Project are not related');
+    } else {
+      throw new Boom.notFound("User and Project are not related");
     }
   }
 
-  static async deleteService( projectId, serviceId, userId) {
-    logger().info('checking if user has the project');
+  static async get(projectId, serviceId, userId) {
+    logger().info("checking if user has the project");
     let ifMatch;
 
     try {
-      ifMatch = await db.knex.raw(
-        userProjectQuery.CHECK_USER_PROJECT, [userId, projectId]
-      );
+      ifMatch = await db.knex.raw(userProjectQuery.CHECK_USER_PROJECT, {
+        userId,
+        projectId
+      });
     } catch (err) {
-      logger().error('Error while persisting the service into database', err);
+      logger().error("Error while persisting the service into database", err);
+    }
+    if (ifMatch.rowCount != 0) {
+      logger().info("Fetching the service", { serviceId });
+      let results = await db.knex.raw(serviceQuery.FETCH_A_SERVICE, {
+        serviceId,
+        projectId
+      });
+
+      return camelize(results.rows);
+    } else {
+      throw new Boom.notFound("User and Project are not related");
+    }
+  }
+
+  static async deleteService(projectId, serviceId, userId) {
+    logger().info("checking if user has the project");
+    let ifMatch;
+
+    try {
+      ifMatch = await db.knex.raw(userProjectQuery.CHECK_USER_PROJECT, {
+        userId,
+        projectId
+      });
+    } catch (err) {
+      logger().error("Error while persisting the service into database", err);
     }
 
     if (ifMatch.rowCount != 0) {
-      logger().info('Fetching the service', { serviceId });
-      let result = await db.knex.raw(
-        serviceQuery.FETCH_A_SERVICE, [serviceId, projectId]
-      ); 
+      logger().info("Fetching the service", { serviceId });
+      let result = await db.knex.raw(serviceQuery.FETCH_A_SERVICE, {
+        serviceId,
+        projectId
+      });
 
       if (!result) {
-        throw new Boom.notFound('No service found under the project');
+        throw new Boom.notFound("No service found under the project");
       }
-      await db.knex.raw(
-        serviceQuery.DELETE_A_SERVICE, [ serviceId, projectId ]
-      );
-      
+      await db.knex.raw(serviceQuery.DELETE_A_SERVICE, {
+        serviceId,
+        projectId
+      });
+
       return camelize(result.rows);
-    }
-    else {
-      throw new Boom.notFound('User and Project are not related');
+    } else {
+      throw new Boom.notFound("User and Project are not related");
     }
   }
 
   static async updateService(projectId, serviceId, data, userId) {
-    logger().info('checking if user has the project');
+    logger().info("checking if user has the project");
     let ifMatch;
 
     try {
-      ifMatch = await db.knex.raw(
-        userProjectQuery.CHECK_USER_PROJECT, [userId, projectId]
-      );
+      ifMatch = await db.knex.raw(userProjectQuery.CHECK_USER_PROJECT, {
+        userId,
+        projectId
+      });
     } catch (err) {
-      logger().error('Error while persisting the service into database', err);
+      logger().error("Error while persisting the service into database", err);
     }
 
     if (ifMatch.rowCount != 0) {
-      logger().info('Updating a service of project', { projectId }, 'where serviceId is', { serviceId });
-      let results = await db.knex.raw(
-        serviceQuery.FETCH_A_SERVICE, [serviceId, projectId]
+      logger().info(
+        "Updating a service of project",
+        { projectId },
+        "where serviceId is",
+        { serviceId }
       );
-      
+      let results = await db.knex.raw(serviceQuery.FETCH_A_SERVICE, {
+        serviceId,
+        projectId
+      });
+
       if (results.rowCount === 0) {
-        throw new Boom.notFound('No Service Found');
+        throw new Boom.notFound("No Service Found");
       }
 
-      await db.knex.raw(
-          serviceQuery.UPDATE_A_SERVICE_SERVICES, [ data.name, data.url, data.type, serviceId, projectId]
-        );
-      let updatedResult = await db.knex.raw(
-        serviceQuery.FETCH_A_SERVICE, [serviceId, projectId]
-      );
+      let name = data.name;
+      let url = data.url;
+      let type = data.type;
 
-      logger().info('service updated');
-      
+      await db.knex.raw(serviceQuery.UPDATE_A_SERVICE_SERVICES, {
+        name,
+        url,
+        type,
+        serviceId,
+        projectId
+      });
+      let updatedResult = await db.knex.raw(serviceQuery.FETCH_A_SERVICE, {
+        serviceId,
+        projectId
+      });
+
+      logger().info("service updated");
+
       return camelize(updatedResult.rows);
-    }
-    else {
-      throw new Boom.notFound('User and Project are not related');
+    } else {
+      throw new Boom.notFound("User and Project are not related");
     }
   }
 }
