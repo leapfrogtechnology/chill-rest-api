@@ -1,7 +1,7 @@
-import Boom from 'boom';
-import logger from '../utils/logger';
-import Service from '../models/Service';
-import StatusLog from '../models/StatusLog';
+import Boom from "boom";
+import logger from "../utils/logger";
+import Service from "../models/Service";
+import StatusLog from "../models/StatusLog";
 
 /**
  * Fetch all services of user.
@@ -15,7 +15,7 @@ export async function fetchAll(id, userId) {
 /**
  * Fetch a single service by it's id (pk).
  *
- * @param  {string|Number}  projectId, serviceId
+ * @param  {string|Number}  projectId, serviceId and userId
  * @return {Promise}
  */
 export async function fetch(projectid, serviceid, userId) {
@@ -25,7 +25,7 @@ export async function fetch(projectid, serviceid, userId) {
 /**
  * delete a single service by it's projectId.
  *
- * @param  {string|Number}  id
+ * @param  {string|Number}  projectId, serviceId and userId
  * @return {Promise}
  */
 export async function deleteService(projectId, serviceId, userId) {
@@ -47,7 +47,7 @@ export async function fetchStatus(serviceId) {
     );
   }
 
-  logger().debug('Retrieved last logged status:', result.toJSON());
+  logger().debug("Retrieved last logged status:", result.toJSON());
 
   return result.toJSON();
 }
@@ -64,14 +64,14 @@ export async function create(data) {
 
     return service.toJSON();
   } catch (err) {
-    logger().error('Error while persisting the service into database', err);
+    logger().error("Error while persisting the service into database", err);
   }
 }
 
 /**
  * Update and save service data.
  *
- * @param {Object}
+ * @param projectId, serviceId, data and userId
  * @returns {Promise}
  */
 export async function updateService(projectId, serviceId, data, userId) {

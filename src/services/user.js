@@ -1,22 +1,21 @@
-import Boom from 'boom';
-import jwt from 'jsonwebtoken';
-import User from '../models/User';
-import logger from '../utils/logger';
-import * as key from '../config/key';
-import * as tokenService from './token';
-import * as generateTokens from '../jwt';
+import Boom from "boom";
+import jwt from "jsonwebtoken";
+import User from "../models/User";
+import logger from "../utils/logger";
+import * as tokenService from "./token";
+import * as generateTokens from "../jwt";
+import * as config from "../config/config";
 
 /**
  * Create new user in database.
  *
- * @param {string}
- * @returns {Promise}
+ * @param {Object} data
  */
 export async function createUser(data) {
   try {
     await User.create(data);
   } catch (err) {
-    logger().error('Error while trying to enter data into the User table');
+    logger().error("Error while trying to enter data into the User table");
   }
 }
 
@@ -24,7 +23,7 @@ export async function createUser(data) {
  * Check the database to see if user exists and if exists, return token. 
  * Otherwise, create new user in database and return token.
  *
- * @param {string}
+ * @param {Object} data
  * @returns {Promise}
  */
 
@@ -36,7 +35,7 @@ export async function loginOrSignUp(data) {
     if (userInfo) {
       let accessToken = generateTokens.generateToken(
         userInfo.id,
-        key.AUTHORIZATION_SALT_KEY,
+        config.get().auth.accessSaltKey,
         300
       );
       let id = userInfo.id;
@@ -47,11 +46,10 @@ export async function loginOrSignUp(data) {
 
       if (expiryTime > divisor) {
         return { accessToken, refreshToken };
-        // logger().debug('Retrieved user data', userInfo.toJSON());
       } else {
         let refreshToken = generateTokens.generateToken(
           userInfo.id,
-          key.REFRESH_TOKEN_SALT_KEY,
+          config.get().auth.refreshSaltKey,
           172800
         );
         let tokenTable = {
@@ -68,12 +66,12 @@ export async function loginOrSignUp(data) {
       let userInfo = await fetchByEmail(data.email);
       let accessToken = generateTokens.generateToken(
         userInfo.id,
-        key.AUTHORIZATION_SALT_KEY,
+        config.get().auth.accessSaltKey,
         300
       );
       let refreshToken = generateTokens.generateToken(
         userInfo.id,
-        key.REFRESH_TOKEN_SALT_KEY,
+        config.get().auth.refreshSaltKey,
         172800
       );
       let tokenTable = {
@@ -86,18 +84,18 @@ export async function loginOrSignUp(data) {
       return { accessToken, refreshToken };
     }
   } catch (err) {
-    logger().error('Error while trying to log in');
+    logger().error("Error while trying to log in");
   }
 }
 
 /**
  * Fetch User by email.
  *
- * @param {string}
+ * @param {string} email
  * @returns {Promise}
  */
 export async function fetchByEmail(email) {
-  logger().debug('Fetching a user by email', { email });
+  logger().debug("Fetching a user by email", { email });
   try {
     let result = await new User({ email }).fetch();
 
@@ -110,18 +108,18 @@ export async function fetchByEmail(email) {
 /**
  * Fetch User from id.
  *
- * @param {string}
+ * @param {Number} id
  * @returns {Promise}
  */
 export async function fetchById(id) {
-  logger().debug('Fetching a user by id', { id });
+  logger().debug("Fetching a user by id", { id });
 
   let result = await new User({ id }).fetch();
 
   if (!result) {
-    throw new Boom.notFound('User not found');
+    throw new Boom.notFound("User not found");
   }
-  logger().debug('Retrieved user data', result.toJSON());
+  logger().debug("Retrieved user data", result.toJSON());
 
   return result;
 }

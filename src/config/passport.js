@@ -1,5 +1,5 @@
-import * as clientInfo from './auth';
-import GooglePassport from 'passport-google-oauth';
+import * as config from "../config/config";
+import GooglePassport from "passport-google-oauth";
 
 let GoogleStrategy = GooglePassport.OAuth2Strategy;
 
@@ -7,9 +7,9 @@ module.exports = function(passport) {
   passport.use(
     new GoogleStrategy(
       {
-        clientID: clientInfo.googleAuth.clientID,
-        callbackURL: clientInfo.googleAuth.callbackURL,
-        clientSecret: clientInfo.googleAuth.clientSecret
+        clientID: config.get().googleAuth.clientID,
+        callbackURL: config.get().googleAuth.callbackURL,
+        clientSecret: config.get().googleAuth.clientSecret
       },
       function(accessToken, refreshToken, profile, done) {
         let data = {
