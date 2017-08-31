@@ -1,5 +1,5 @@
-import * as config from "../config/config";
-import GooglePassport from "passport-google-oauth";
+import * as config from '../config/config';
+import GooglePassport from 'passport-google-oauth';
 
 let GoogleStrategy = GooglePassport.OAuth2Strategy;
 

@@ -43,22 +43,26 @@ class Service extends db.Model {
     return service;
   }
 
-  static async fetchAll(id, userId) {
-    logger().info('checking if user has the project', { id });
+  static async fetchAll(projectId, userId) {
+    logger().info('checking if user has the project', { projectId });
     let ifMatch;
 
     try {
-      ifMatch = await db.knex.raw(userProjectQuery.CHECK_USER_PROJECT, [
+      ifMatch = await db.knex.raw(userProjectQuery.CHECK_USER_PROJECT, {
         userId,
-        id
-      ]);
+        projectId
+      });
     } catch (err) {
       logger().error('Error while persisting the service into database', err);
     }
 
     if (ifMatch.rowCount !== 0) {
-      logger().info('Fetching the services of projects of project id', { id });
-      let results = await db.knex.raw(serviceQuery.FETCH_All_SERVICE, [id]);
+      logger().info('Fetching the services of projects of project id', {
+        projectId
+      });
+      let results = await db.knex.raw(serviceQuery.FETCH_All_SERVICE, {
+        projectId
+      });
 
       return camelize(results.rows);
     } else {
@@ -71,19 +75,19 @@ class Service extends db.Model {
     let ifMatch;
 
     try {
-      ifMatch = await db.knex.raw(userProjectQuery.CHECK_USER_PROJECT, [
+      ifMatch = await db.knex.raw(userProjectQuery.CHECK_USER_PROJECT, {
         userId,
         projectId
-      ]);
+      });
     } catch (err) {
       logger().error('Error while persisting the service into database', err);
     }
     if (ifMatch.rowCount !== 0) {
       logger().info('Fetching the service', { serviceId });
-      let results = await db.knex.raw(serviceQuery.FETCH_A_SERVICE, [
+      let results = await db.knex.raw(serviceQuery.FETCH_A_SERVICE, {
         serviceId,
         projectId
-      ]);
+      });
 
       return camelize(results.rows);
     } else {
@@ -96,25 +100,28 @@ class Service extends db.Model {
     let ifMatch;
 
     try {
-      ifMatch = await db.knex.raw(userProjectQuery.CHECK_USER_PROJECT, [
+      ifMatch = await db.knex.raw(userProjectQuery.CHECK_USER_PROJECT, {
         userId,
         projectId
-      ]);
+      });
     } catch (err) {
       logger().error('Error while persisting the service into database', err);
     }
 
     if (ifMatch.rowCount !== 0) {
       logger().info('Fetching the service', { serviceId });
-      let result = await db.knex.raw(serviceQuery.FETCH_A_SERVICE, [
+      let result = await db.knex.raw(serviceQuery.FETCH_A_SERVICE, {
         serviceId,
         projectId
-      ]);
+      });
 
       if (!result) {
         throw new Boom.notFound('No service found under the project');
       }
-      await db.knex.raw(serviceQuery.DELETE_A_SERVICE, [serviceId, projectId]);
+      await db.knex.raw(serviceQuery.DELETE_A_SERVICE, {
+        serviceId,
+        projectId
+      });
 
       return camelize(result.rows);
     } else {
@@ -127,10 +134,10 @@ class Service extends db.Model {
     let ifMatch;
 
     try {
-      ifMatch = await db.knex.raw(userProjectQuery.CHECK_USER_PROJECT, [
+      ifMatch = await db.knex.raw(userProjectQuery.CHECK_USER_PROJECT, {
         userId,
         projectId
-      ]);
+      });
     } catch (err) {
       logger().error('Error while persisting the service into database', err);
     }
@@ -142,26 +149,30 @@ class Service extends db.Model {
         'where serviceId is',
         { serviceId }
       );
-      let results = await db.knex.raw(serviceQuery.FETCH_A_SERVICE, [
+      let results = await db.knex.raw(serviceQuery.FETCH_A_SERVICE, {
         serviceId,
         projectId
-      ]);
+      });
 
       if (results.rowCount === 0) {
         throw new Boom.notFound('No Service Found');
       }
 
-      await db.knex.raw(serviceQuery.UPDATE_A_SERVICE_SERVICES, [
-        data.name,
-        data.url,
-        data.type,
+      let name = data.name;
+      let url = data.url;
+      let type = data.type;
+
+      await db.knex.raw(serviceQuery.UPDATE_A_SERVICE_SERVICES, {
+        name,
+        url,
+        type,
         serviceId,
         projectId
-      ]);
-      let updatedResult = await db.knex.raw(serviceQuery.FETCH_A_SERVICE, [
+      });
+      let updatedResult = await db.knex.raw(serviceQuery.FETCH_A_SERVICE, {
         serviceId,
         projectId
-      ]);
+      });
 
       logger().info('service updated');
 

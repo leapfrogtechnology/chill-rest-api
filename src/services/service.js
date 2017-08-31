@@ -1,7 +1,7 @@
-import Boom from "boom";
-import logger from "../utils/logger";
-import Service from "../models/Service";
-import StatusLog from "../models/StatusLog";
+import Boom from 'boom';
+import logger from '../utils/logger';
+import Service from '../models/Service';
+import StatusLog from '../models/StatusLog';
 
 /**
  * Fetch all services of user.
@@ -47,7 +47,7 @@ export async function fetchStatus(serviceId) {
     );
   }
 
-  logger().debug("Retrieved last logged status:", result.toJSON());
+  logger().debug('Retrieved last logged status:', result.toJSON());
 
   return result.toJSON();
 }
@@ -64,7 +64,7 @@ export async function create(data) {
 
     return service.toJSON();
   } catch (err) {
-    logger().error("Error while persisting the service into database", err);
+    logger().error('Error while persisting the service into database', err);
   }
 }
 

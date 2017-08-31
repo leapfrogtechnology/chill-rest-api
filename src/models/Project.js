@@ -42,7 +42,9 @@ class Project extends db.Model {
 
   static async fetchAll(id) {
     logger().info('Fetching the projects of user', { id });
-    let results = await db.knex.raw(projectQuery.FETCH_All_PROJECTS, [id]);
+    let results = await db.knex.raw(projectQuery.FETCH_All_PROJECTS, {
+      id
+    });
 
     return camelize(results.rows);
   }
@@ -54,10 +56,10 @@ class Project extends db.Model {
       'where projectId is',
       { projectId }
     );
-    let results = await db.knex.raw(projectQuery.FETCH_A_PROJECT, [
+    let results = await db.knex.raw(projectQuery.FETCH_A_PROJECT, {
       userId,
       projectId
-    ]);
+    });
 
     return camelize(results.rows);
   }
@@ -69,18 +71,18 @@ class Project extends db.Model {
       'where projectId is',
       { projectId }
     );
-    let results = await db.knex.raw(projectQuery.FETCH_A_PROJECT, [
+    let results = await db.knex.raw(projectQuery.FETCH_A_PROJECT, {
       userId,
       projectId
-    ]);
+    });
 
     if (results.rowCount === 0) {
       throw new Boom.notFound('No Project Found');
     }
 
-    await db.knex.raw(projectQuery.DELETE_A_PROJECT_USERPROJECT, [projectId]);
+    await db.knex.raw(projectQuery.DELETE_A_PROJECT_USERPROJECT, { projectId });
 
-    await db.knex.raw(projectQuery.DELETE_A_PROJECT_PROJECTS, [projectId]);
+    await db.knex.raw(projectQuery.DELETE_A_PROJECT_PROJECTS, { projectId });
 
     logger().info('project deleted');
 
@@ -94,24 +96,27 @@ class Project extends db.Model {
       'where projectId is',
       { projectId }
     );
-    let results = await db.knex.raw(projectQuery.FETCH_A_PROJECT, [
+    let results = await db.knex.raw(projectQuery.FETCH_A_PROJECT, {
       userId,
       projectId
-    ]);
+    });
 
     if (results.rowCount === 0) {
       throw new Boom.notFound('No Project Found');
     }
 
-    await db.knex.raw(projectQuery.UPDATE_A_PROJECT_PROJECTS, [
-      data.name,
-      data.description,
+    let name = data.name;
+    let description = data.description;
+
+    await db.knex.raw(projectQuery.UPDATE_A_PROJECT_PROJECTS, {
+      name,
+      description,
       projectId
-    ]);
-    let updatedResult = await db.knex.raw(projectQuery.FETCH_A_PROJECT, [
+    });
+    let updatedResult = await db.knex.raw(projectQuery.FETCH_A_PROJECT, {
       userId,
       projectId
-    ]);
+    });
 
     logger().info('project updated');
 

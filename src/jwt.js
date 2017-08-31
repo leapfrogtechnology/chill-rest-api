@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
 
 /**
 * Generate new Token using userId, Salt key and time (in seconds).
@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 * @return {string|Number} 
 */
 export function generateToken(userId, secret, time) {
-  return jwt.sign({ userId }, secret, { expiresIn: time + "s" });
+  return jwt.sign({ userId }, secret, { expiresIn: time + 's' });
 }
 
 /**

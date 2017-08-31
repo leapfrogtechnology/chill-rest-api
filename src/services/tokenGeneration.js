@@ -1,5 +1,5 @@
-import * as generateTokens from "../jwt";
-import * as config from "../config/config";
+import * as generateTokens from '../jwt';
+import * as config from '../config/config';
 
 /**
 * Generate new access token and refresh token, given id
