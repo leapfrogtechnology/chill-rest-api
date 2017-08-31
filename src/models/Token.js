@@ -21,7 +21,7 @@ class Token extends db.Model {
   static async create(data) {
     let token = new Token({
       user_id: data.userId,
-      refresh_token: data.refreshToken    
+      refresh_token: data.refreshToken
     });
 
     logger().info('Creating a new token entry');
@@ -29,7 +29,7 @@ class Token extends db.Model {
 
     await token.save();
     logger().info('Token entered', { id: token.get('id') });
-    
+
     return token;
   }
 }

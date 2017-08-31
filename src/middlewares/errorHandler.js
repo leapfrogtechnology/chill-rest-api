@@ -9,7 +9,8 @@ import buildError from '../utils/buildError';
  * @param  {object}   res
  * @param  {function} next
  */
-export function notFoundError(req, res, next) { // eslint-disable-line no-unused-vars
+export function notFoundError(req, res, next) {
+  // eslint-disable-line no-unused-vars
   res.status(HttpStatus.NOT_FOUND).json({
     error: {
       code: HttpStatus.NOT_FOUND,
@@ -26,7 +27,8 @@ export function notFoundError(req, res, next) { // eslint-disable-line no-unused
  * @param  {object}   res
  * @param  {function} next
  */
-export function genericErrorHandler(err, req, res, next) {  // eslint-disable-line no-unused-vars
+export function genericErrorHandler(err, req, res, next) {
+  // eslint-disable-line no-unused-vars
   if (err.stack) {
     logger().debug(err.stack);
   }

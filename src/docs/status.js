@@ -60,7 +60,7 @@
  *                   type: string
  */
 
- /**
+/**
   * @swagger
   * /users:
   *   get:
@@ -80,7 +80,7 @@
   *             $ref: '#/definitions/User'
   */
 
-  /**
+/**
    * @swagger
    * /users/{id}:
    *   get:
@@ -113,7 +113,7 @@
    *           $ref: '#/definitions/ServerError'
    */
 
-   /**
+/**
     * @swagger
     * /users:
     *   post:
@@ -147,7 +147,7 @@
     *           $ref: '#/definitions/ServerError'
     */
 
-    /**
+/**
      * @swagger
      * /users/{id}:
      *   put:
@@ -200,7 +200,7 @@
      *           $ref: '#/definitions/ServerError'
      */
 
-     /**
+/**
       * @swagger
       * /users/{id}:
       *   delete:

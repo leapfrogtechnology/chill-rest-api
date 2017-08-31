@@ -15,8 +15,7 @@ import * as generateTokens from '../jwt';
 export async function createUser(data) {
   try {
     await User.create(data);
-  }
-  catch (err) {
+  } catch (err) {
     logger().error('Error while trying to enter data into the User table');
   }
 }
@@ -35,7 +34,11 @@ export async function loginOrSignUp(data) {
     let userInfo = await fetchByEmail(email);
 
     if (userInfo) {
-      let accessToken = generateTokens.generateToken(userInfo.id, key.AUTHORIZATION_SALT_KEY, 300);
+      let accessToken = generateTokens.generateToken(
+        userInfo.id,
+        key.AUTHORIZATION_SALT_KEY,
+        300
+      );
       let id = userInfo.id;
       let tokenData = await tokenService.checkToken(id);
       let refreshToken = tokenData.attributes.refreshToken;
@@ -43,11 +46,14 @@ export async function loginOrSignUp(data) {
       let expiryTime = jwt.decode(refreshToken).exp;
 
       if (expiryTime > divisor) {
-        return ({ accessToken, refreshToken });
+        return { accessToken, refreshToken };
         // logger().debug('Retrieved user data', userInfo.toJSON());
-      }
-      else {
-        let refreshToken = generateTokens.generateToken(userInfo.id, key.REFRESH_TOKEN_SALT_KEY, 172800);
+      } else {
+        let refreshToken = generateTokens.generateToken(
+          userInfo.id,
+          key.REFRESH_TOKEN_SALT_KEY,
+          172800
+        );
         let tokenTable = {
           userId: userInfo.id,
           refreshToken: refreshToken
@@ -55,15 +61,21 @@ export async function loginOrSignUp(data) {
 
         tokenService.createToken(tokenTable);
 
-        return ({ accessToken, refreshToken });
+        return { accessToken, refreshToken };
       }
-
-    }
-    else {
+    } else {
       await createUser(data);
       let userInfo = await fetchByEmail(data.email);
-      let accessToken = generateTokens.generateToken(userInfo.id, key.AUTHORIZATION_SALT_KEY, 300);
-      let refreshToken = generateTokens.generateToken(userInfo.id, key.REFRESHTOKEN_SALT_KEY, 172800);
+      let accessToken = generateTokens.generateToken(
+        userInfo.id,
+        key.AUTHORIZATION_SALT_KEY,
+        300
+      );
+      let refreshToken = generateTokens.generateToken(
+        userInfo.id,
+        key.REFRESH_TOKEN_SALT_KEY,
+        172800
+      );
       let tokenTable = {
         userId: userInfo.id,
         refreshToken: refreshToken
@@ -71,10 +83,9 @@ export async function loginOrSignUp(data) {
 
       tokenService.createToken(tokenTable);
 
-      return ({ accessToken, refreshToken });
+      return { accessToken, refreshToken };
     }
-  }
-  catch (err) {
+  } catch (err) {
     logger().error('Error while trying to log in');
   }
 }
@@ -90,10 +101,8 @@ export async function fetchByEmail(email) {
   try {
     let result = await new User({ email }).fetch();
 
-
     return result;
-  }
-  catch (err) {
+  } catch (err) {
     throw err;
   }
 }

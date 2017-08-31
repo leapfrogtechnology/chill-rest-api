@@ -8,13 +8,11 @@ import Project from '../models/Project';
  * @returns {Promise}
  */
 export async function create(data) {
-
   try {
     let project = await Project.create(data);
 
     return project.toJSON();
-  }
-  catch (err) {
+  } catch (err) {
     logger().error('Error while persisting the project into database', err);
   }
 }

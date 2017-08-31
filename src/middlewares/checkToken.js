@@ -5,16 +5,19 @@ import * as tokenServices from '../services/token';
 
 export async function authenticate(req, res, next) {
   if (!req.header('Authorization')) {
-    return res.status(HttpStatus.UNAUTHORIZED).json({ message: 'Authorization header not present.' });
+    return res
+      .status(HttpStatus.UNAUTHORIZED)
+      .json({ message: 'Authorization header not present.' });
   }
-
   const token = req.headers.authorization.split(' ')[1];
   let tokenPayload;
 
   try {
-    tokenPayload = jwt.verify(token, key.AUTHENTICATION_SALT_KEY);
+    tokenPayload = jwt.verify(token, key.AUTHORIZATION_SALT_KEY);
   } catch (err) {
-    return res.status(HttpStatus.UNAUTHORIZED).json({ message: 'Invalid authorization token.' });
+    return res
+      .status(HttpStatus.UNAUTHORIZED)
+      .json({ message: 'Invalid authorization token.' });
   }
   req.userId = tokenPayload.userId;
   next();
@@ -23,15 +26,25 @@ export async function authenticate(req, res, next) {
 export async function authenticateRefreshToken(req, res, next) {
   const userId = req.params.userId;
 
+  if (!req.body.refreshToken) {
+    return res
+      .status(HttpStatus.UNAUTHORIZED)
+      .json({ message: 'Refresh Token not present.' });
+  }
+
   try {
     let tokenData = await tokenServices.fetchToken(userId);
 
     let refreshToken = tokenData.refresh_token;
 
     if (!refreshToken) {
-      return res.status(HttpStatus.UNAUTHORIZED).json({ message: 'Invalid refresh token.' });
+      return res
+        .status(HttpStatus.UNAUTHORIZED)
+        .json({ message: 'Invalid refresh token.' });
     }
-    jwt.verify(refreshToken, key.REFRESH_TOKEN_SALT_KEY);
+    let tokenPayload = jwt.verify(refreshToken, key.REFRESH_TOKEN_SALT_KEY);
+
+    req.userId = tokenPayload.userId;
 
     return next();
   } catch (err) {
