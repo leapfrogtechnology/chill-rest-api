@@ -1,9 +1,21 @@
-import * as config from '../config/config';
-import GooglePassport from 'passport-google-oauth';
+import passport from "passport";
+import * as config from "../config/config";
+import GooglePassport from "passport-google-oauth";
 
 let GoogleStrategy = GooglePassport.OAuth2Strategy;
+let passportInstance;
 
-module.exports = function(passport) {
+/**
+ * Create a new passport instance.
+ * Return the same passport instance if it is already created.
+ *
+ * @returns {Object}
+ */
+export function getPassportInstance() {
+  if (passportInstance) {
+    return passportInstance;
+  }
+
   passport.use(
     new GoogleStrategy(
       {
@@ -28,4 +40,8 @@ module.exports = function(passport) {
   passport.serializeUser(function(user, done) {
     done(null, user);
   });
-};
+
+  passportInstance = passport;
+
+  return passportInstance;
+}
