@@ -1,15 +1,14 @@
-import jwt from 'jsonwebtoken';
-import * as key from '../config/key';
-import HttpStatus from 'http-status-codes';
-import * as tokenServices from '../services/token';
+import jwt from "jsonwebtoken";
+import HttpStatus from "http-status-codes";
+import * as tokenServices from "../services/token";
 
 export async function authenticate(req, res, next) {
-  if (!req.header('Authorization')) {
+  if (!req.header("Authorization")) {
     return res
       .status(HttpStatus.UNAUTHORIZED)
-      .json({ message: 'Authorization header not present.' });
+      .json({ message: "Authorization header not present." });
   }
-  const token = req.headers.authorization.split(' ')[1];
+  const token = req.headers.authorization.split(" ")[1];
   let tokenPayload;
 
   try {
@@ -17,7 +16,7 @@ export async function authenticate(req, res, next) {
   } catch (err) {
     return res
       .status(HttpStatus.UNAUTHORIZED)
-      .json({ message: 'Invalid authorization token.' });
+      .json({ message: "Invalid authorization token." });
   }
   req.userId = tokenPayload.userId;
   next();
@@ -29,7 +28,7 @@ export async function authenticateRefreshToken(req, res, next) {
   if (!req.body.refreshToken) {
     return res
       .status(HttpStatus.UNAUTHORIZED)
-      .json({ message: 'Refresh Token not present.' });
+      .json({ message: "Refresh Token not present." });
   }
 
   try {
@@ -40,7 +39,7 @@ export async function authenticateRefreshToken(req, res, next) {
     if (!refreshToken) {
       return res
         .status(HttpStatus.UNAUTHORIZED)
-        .json({ message: 'Invalid refresh token.' });
+        .json({ message: "Invalid refresh token." });
     }
     let tokenPayload = jwt.verify(refreshToken, key.REFRESH_TOKEN_SALT_KEY);
 

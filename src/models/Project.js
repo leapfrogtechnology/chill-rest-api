@@ -80,8 +80,15 @@ class Project extends db.Model {
       throw new Boom.notFound("No Project Found");
     }
 
-    await db.knex.raw(projectQuery.DELETE_A_PROJECT_USERPROJECT, { projectId });
-
+    // await db.knex.raw(projectQuery.DELETE_A_PROJECT_USERPROJECT, { projectId });
+    try {
+      db
+        .knex(user_project)
+        .where("project_id", projectId)
+        .del();
+    } catch (err) {
+      logger().error("Error while deleting the project", err);
+    }
     await db.knex.raw(projectQuery.DELETE_A_PROJECT_PROJECTS, { projectId });
 
     logger().info("project deleted");

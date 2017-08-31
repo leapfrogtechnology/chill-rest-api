@@ -1,10 +1,9 @@
-import Boom from 'boom';
-import jwt from 'jsonwebtoken';
-import User from '../models/User';
-import logger from '../utils/logger';
-import * as key from '../config/key';
-import * as tokenService from './token';
-import * as generateTokens from '../jwt';
+import Boom from "boom";
+import jwt from "jsonwebtoken";
+import User from "../models/User";
+import logger from "../utils/logger";
+import * as tokenService from "./token";
+import * as generateTokens from "../jwt";
 
 /**
  * Create new user in database.
@@ -16,7 +15,7 @@ export async function createUser(data) {
   try {
     await User.create(data);
   } catch (err) {
-    logger().error('Error while trying to enter data into the User table');
+    logger().error("Error while trying to enter data into the User table");
   }
 }
 
@@ -86,7 +85,7 @@ export async function loginOrSignUp(data) {
       return { accessToken, refreshToken };
     }
   } catch (err) {
-    logger().error('Error while trying to log in');
+    logger().error("Error while trying to log in");
   }
 }
 
@@ -97,7 +96,7 @@ export async function loginOrSignUp(data) {
  * @returns {Promise}
  */
 export async function fetchByEmail(email) {
-  logger().debug('Fetching a user by email', { email });
+  logger().debug("Fetching a user by email", { email });
   try {
     let result = await new User({ email }).fetch();
 
@@ -114,14 +113,14 @@ export async function fetchByEmail(email) {
  * @returns {Promise}
  */
 export async function fetchById(id) {
-  logger().debug('Fetching a user by id', { id });
+  logger().debug("Fetching a user by id", { id });
 
   let result = await new User({ id }).fetch();
 
   if (!result) {
-    throw new Boom.notFound('User not found');
+    throw new Boom.notFound("User not found");
   }
-  logger().debug('Retrieved user data', result.toJSON());
+  logger().debug("Retrieved user data", result.toJSON());
 
   return result;
 }

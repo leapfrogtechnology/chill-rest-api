@@ -1,15 +1,14 @@
-import jwt from 'jsonwebtoken';
-import Token from '../models/Token';
-import logger from '../utils/logger';
-import * as key from '../config/key';
-import * as generateTokens from '../jwt';
+import jwt from "jsonwebtoken";
+import Token from "../models/Token";
+import logger from "../utils/logger";
+import * as generateTokens from "../jwt";
 
 export async function createToken(data) {
   try {
     await Token.create(data);
   } catch (err) {
     logger().error(
-      'Error while trying to enter token data into the Token table'
+      "Error while trying to enter token data into the Token table"
     );
   }
 }
