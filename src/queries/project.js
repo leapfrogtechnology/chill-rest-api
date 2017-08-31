@@ -32,4 +32,3 @@ export const UPDATE_A_PROJECT_PROJECTS = `
     SET name = :name , description = :description
     WHERE id = :projectId ;
     `;
-

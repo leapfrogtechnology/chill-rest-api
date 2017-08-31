@@ -1,17 +1,23 @@
 import * as generateTokens from '../jwt';
-import * as key from '../config/key';
+import * as config from '../config/config';
+
+/**
+* Generate new access token and refresh token, given id
+*
+* @param  {Number}  id
+*/
 
 export async function provideToken(id) {
   return new Promise(resolve => {
     let accessToken = generateTokens.generateToken(
       id,
-      key.AUTHORIZATION_SALT_KEY,
+      config.get().auth.accessSaltKey,
       300
     );
 
     let refreshToken = generateTokens.generateToken(
       id,
-      key.REFRESH_TOKEN_SALT_KEY,
+      config.get().auth.refreshSaltKey,
       172800
     );
 

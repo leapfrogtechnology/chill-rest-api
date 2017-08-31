@@ -15,7 +15,7 @@ export async function fetchAll(id, userId) {
 /**
  * Fetch a single service by it's id (pk).
  *
- * @param  {string|Number}  projectId, serviceId
+ * @param  {string|Number}  projectId, serviceId and userId
  * @return {Promise}
  */
 export async function fetch(projectid, serviceid, userId) {
@@ -25,7 +25,7 @@ export async function fetch(projectid, serviceid, userId) {
 /**
  * delete a single service by it's projectId.
  *
- * @param  {string|Number}  id
+ * @param  {string|Number}  projectId, serviceId and userId
  * @return {Promise}
  */
 export async function deleteService(projectId, serviceId, userId) {
@@ -71,7 +71,7 @@ export async function create(data) {
 /**
  * Update and save service data.
  *
- * @param {Object}
+ * @param projectId, serviceId, data and userId
  * @returns {Promise}
  */
 export async function updateService(projectId, serviceId, data, userId) {

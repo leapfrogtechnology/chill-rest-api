@@ -1,10 +1,15 @@
 // User project  service
 
 import Boom from 'boom';
-
 import logger from '../utils/logger';
 import UserProject from '../models/UserProject';
 
+/**
+* Create new entry in user-project relation table.
+*
+* @param  {Object}  data
+* @return {Promise}
+*/
 export async function create(data) {
   try {
     let userProject = await UserProject.create(data);
@@ -14,6 +19,13 @@ export async function create(data) {
     logger().error('Error while persisting the project into database', err);
   }
 }
+
+/**
+* Fetch user project by user_id.
+*
+* @param  {Number}  user_id
+* @return {Promise}
+*/
 
 export async function getProject(user_id) {
   logger().debug('Fetching userProject by userid', { user_id });

@@ -4,12 +4,12 @@ import User from "../models/User";
 import logger from "../utils/logger";
 import * as tokenService from "./token";
 import * as generateTokens from "../jwt";
+import * as config from "../config/config";
 
 /**
  * Create new user in database.
  *
- * @param {string}
- * @returns {Promise}
+ * @param {Object} data
  */
 export async function createUser(data) {
   try {
@@ -23,7 +23,7 @@ export async function createUser(data) {
  * Check the database to see if user exists and if exists, return token. 
  * Otherwise, create new user in database and return token.
  *
- * @param {string}
+ * @param {Object} data
  * @returns {Promise}
  */
 
@@ -35,7 +35,7 @@ export async function loginOrSignUp(data) {
     if (userInfo) {
       let accessToken = generateTokens.generateToken(
         userInfo.id,
-        key.AUTHORIZATION_SALT_KEY,
+        config.get().auth.accessSaltKey,
         300
       );
       let id = userInfo.id;
@@ -46,11 +46,10 @@ export async function loginOrSignUp(data) {
 
       if (expiryTime > divisor) {
         return { accessToken, refreshToken };
-        // logger().debug('Retrieved user data', userInfo.toJSON());
       } else {
         let refreshToken = generateTokens.generateToken(
           userInfo.id,
-          key.REFRESH_TOKEN_SALT_KEY,
+          config.get().auth.refreshSaltKey,
           172800
         );
         let tokenTable = {
@@ -67,12 +66,12 @@ export async function loginOrSignUp(data) {
       let userInfo = await fetchByEmail(data.email);
       let accessToken = generateTokens.generateToken(
         userInfo.id,
-        key.AUTHORIZATION_SALT_KEY,
+        config.get().auth.accessSaltKey,
         300
       );
       let refreshToken = generateTokens.generateToken(
         userInfo.id,
-        key.REFRESH_TOKEN_SALT_KEY,
+        config.get().auth.refreshSaltKey,
         172800
       );
       let tokenTable = {
@@ -92,7 +91,7 @@ export async function loginOrSignUp(data) {
 /**
  * Fetch User by email.
  *
- * @param {string}
+ * @param {string} email
  * @returns {Promise}
  */
 export async function fetchByEmail(email) {
@@ -109,7 +108,7 @@ export async function fetchByEmail(email) {
 /**
  * Fetch User from id.
  *
- * @param {string}
+ * @param {Number} id
  * @returns {Promise}
  */
 export async function fetchById(id) {

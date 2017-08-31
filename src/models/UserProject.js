@@ -1,14 +1,14 @@
-import logger from "../utils/logger";
-import { getClient } from "../utils/db";
+import logger from '../utils/logger';
+import { getClient } from '../utils/db';
 
 const db = getClient();
 
-export const TYPE_HTTP = "http";
-export const TYPE_TCP = "tcp";
+export const TYPE_HTTP = 'http';
+export const TYPE_TCP = 'tcp';
 
 class UserProject extends db.Model {
   get tableName() {
-    return "user_project";
+    return 'user_project';
   }
 
   get hasTimestamps() {
@@ -27,12 +27,12 @@ class UserProject extends db.Model {
       user_id: data.userId
     });
 
-    logger().info("Creating a new User Project");
-    logger().debug("UserProject data", data);
+    logger().info('Creating a new User Project');
+    logger().debug('UserProject data', data);
 
     await userProject.save();
 
-    logger().info("User Project created", { id: userProject.get("id") });
+    logger().info('User Project created', { id: userProject.get('id') });
 
     return userProject;
   }

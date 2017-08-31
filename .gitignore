@@ -35,9 +35,3 @@ coverage
 # Chill database
 chill.db
 chill.yml
-
-# Google OAuth details
-src/config/auth.js
-
-# JWT Salt keys
-src/config/key.js
