@@ -8,9 +8,9 @@ import { fetch as fetchService } from './service';
  *
  * @return {Promise}
  */
-export function fetchAll() {
+export function fetchAll(projectId) {
   // TODO: Pagination
-  return StatusLog.fetchAllLogs();
+  return StatusLog.fetchAllLogs(projectId);
 }
 
 /**

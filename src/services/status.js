@@ -1,5 +1,4 @@
 import Boom from 'boom';
-
 import logger from '../utils/logger';
 import Status from '../models/Status';
 
@@ -9,7 +8,7 @@ import Status from '../models/Status';
  * @param  {string|Number}  id
  * @return {Promise}
  */
- 
+
 export async function fetch(id) {
   logger().debug('Fetching a status record by id', { id });
 

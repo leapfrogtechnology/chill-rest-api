@@ -10,7 +10,8 @@ import * as serviceService from '../services/service';
 export function getAll(req, res, next) {
   let projectId = req.params.id;
 
-  serviceService.fetchAll(projectId, req.userId)
+  serviceService
+    .fetchAll(projectId, req.userId)
     .then(data => res.json(data))
     .catch(err => next(err));
 }
@@ -24,9 +25,10 @@ export function getAll(req, res, next) {
  */
 export function get(req, res, next) {
   let projectId = req.params.id;
-  let serviceId = req.params.serviceid;
+  let serviceId = req.params.serviceId;
 
-  serviceService.fetch(projectId, serviceId, req.userId)
+  serviceService
+    .fetch(projectId, serviceId, req.userId)
     .then(data => res.json(data))
     .catch(err => next(err));
 }
@@ -39,7 +41,8 @@ export function get(req, res, next) {
  * @param {Object} next
  */
 export function getServiceStatus(req, res, next) {
-  serviceService.fetchStatus(req.params.id, req.userId)
+  serviceService
+    .fetchStatus(req.params.id, req.params.serviceId, req.userId)
     .then(data => res.json(data))
     .catch(err => next(err));
 }
@@ -56,7 +59,8 @@ export function create(req, res, next) {
     type: req.body.type
   };
 
-  serviceService.create(data)
+  serviceService
+    .create(data)
     .then(newService => {
       res.json(newService);
     })
@@ -71,10 +75,11 @@ export function create(req, res, next) {
  * @param {Object} next
  */
 export function deleteService(req, res, next) {
-  let projectId = req.params.projectid;
-  let serviceId = req.params.serviceid;
+  let projectId = req.params.projectId;
+  let serviceId = req.params.serviceId;
 
-  serviceService.deleteService(projectId, serviceId, req.userId)
+  serviceService
+    .deleteService(projectId, serviceId, req.userId)
     .then(deletedService => res.json(deletedService))
     .catch(err => next(err));
 }
@@ -87,10 +92,11 @@ export function deleteService(req, res, next) {
  * @param {Object} next
  */
 export function updateService(req, res, next) {
-  let projectId = req.params.projectid;
-  let serviceId = req.params.serviceid;
+  let projectId = req.params.projectId;
+  let serviceId = req.params.serviceId;
 
-  serviceService.updateService(projectId, serviceId, req.body, req.userId)
+  serviceService
+    .updateService(projectId, serviceId, req.body, req.userId)
     .then(data => res.json(data))
     .catch(err => next(err));
 }

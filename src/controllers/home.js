@@ -7,7 +7,6 @@ export function getSwaggerSpec(req, res) {
   res.json(swaggerSpec);
 }
 
-
 /**
  * @swagger
  * definitions:

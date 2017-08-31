@@ -7,8 +7,9 @@ import * as userService from '../services/user';
  * @param {Object} res
  * @param {Object} next
 */
-export function create( req, res, next ) {
-  userService.createUser(req.user)
+export function create(req, res, next) {
+  userService
+    .createUser(req.user)
     .then(data => res.json(data))
     .catch(err => next(err));
 }
@@ -20,10 +21,11 @@ export function create( req, res, next ) {
  * @param {Object} res
  * @param {Object} next
 */
-export function get( req, res, next) {
-  userService.fetchById(req.params.id)
+export function get(req, res, next) {
+  userService
+    .fetchById(req.params.id)
     .then(data => res.json(data))
-    .catch(err => next(err));       
+    .catch(err => next(err));
 }
 
 /**
@@ -33,8 +35,9 @@ export function get( req, res, next) {
  * @param {Object} res
  * @param {Object} next
 */
-export function getUserByName( req, res, next) {
-  userService.fetchByName(req.params.id)
+export function getUserByName(req, res, next) {
+  userService
+    .fetchByName(req.params.id)
     .then(data => res.json(data))
     .catch(err => next(err));
 }
@@ -46,9 +49,9 @@ export function getUserByName( req, res, next) {
  * @param {Object} res
  * @param {Object} next
 */
-export function loginOrSignUp( req, res, next) {
-  userService.loginOrSignUp(req.user)
+export function loginOrSignUp(req, res, next) {
+  userService
+    .loginOrSignUp(req.user)
     .then(data => res.json(data))
     .catch(err => next(err));
 }
-

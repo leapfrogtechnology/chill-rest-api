@@ -100,6 +100,7 @@ class Project extends db.Model {
       userId,
       projectId
     });
+
     if (results.rowCount === 0) {
       throw new Boom.notFound("No Project Found");
     }
