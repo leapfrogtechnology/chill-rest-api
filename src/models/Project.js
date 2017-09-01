@@ -1,5 +1,6 @@
 import Boom from 'Boom';
 import camelize from 'camelize';
+
 import logger from '../utils/logger';
 import { getClient } from '../utils/db';
 import * as projectQuery from '../queries/project';
@@ -71,6 +72,7 @@ class Project extends db.Model {
       'where projectId is',
       { projectId }
     );
+
     let results = await db.knex.raw(projectQuery.FETCH_A_PROJECT, {
       userId,
       projectId

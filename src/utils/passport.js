@@ -1,6 +1,7 @@
-import passport from "passport";
-import * as config from "../config/config";
-import GooglePassport from "passport-google-oauth";
+import passport from 'passport';
+import GooglePassport from 'passport-google-oauth';
+
+import * as config from '../config/config';
 
 let GoogleStrategy = GooglePassport.OAuth2Strategy;
 let passportInstance;
@@ -19,17 +20,18 @@ export function getPassportInstance() {
   passport.use(
     new GoogleStrategy(
       {
-        clientID: config.get().googleAuth.clientID,
-        callbackURL: config.get().googleAuth.callbackURL,
-        clientSecret: config.get().googleAuth.clientSecret
+        clientID: config.get().auth.googleAuth.clientID,
+        callbackURL: config.get().auth.googleAuth.callbackURL,
+        clientSecret: config.get().auth.googleAuth.clientSecret
       },
       function(accessToken, refreshToken, profile, done) {
+        const { id, displayName, emails, _json } = profile;
         let data = {
-          id: profile.id,
-          accessToken: accessToken,
-          name: profile.displayName,
-          email: profile.emails[0].value,
-          image: profile._json.image.url
+          id,
+          accessToken,
+          name: displayName,
+          email: emails[0].value,
+          image: _json.image.url
         };
 
         return done(null, data);

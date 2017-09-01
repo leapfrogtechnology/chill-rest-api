@@ -12,13 +12,13 @@ export async function provideToken(id) {
     let accessToken = generateTokens.generateToken(
       id,
       config.get().auth.accessSaltKey,
-      300
+      config.get().auth.accessTime
     );
 
     let refreshToken = generateTokens.generateToken(
       id,
       config.get().auth.refreshSaltKey,
-      172800
+      config.get().auth.refreshTime
     );
 
     resolve({ accessToken, refreshToken });

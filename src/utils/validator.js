@@ -26,4 +26,3 @@ export function validate(data, schema) {
     resolve(result);
   });
 }
-

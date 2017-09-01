@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import HttpStatus from 'http-status-codes';
+
 import * as config from '../config/config';
 import * as tokenServices from '../services/token';
 

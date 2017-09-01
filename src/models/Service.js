@@ -1,5 +1,6 @@
 import Boom from 'Boom';
 import camelize from 'camelize';
+
 import logger from '../utils/logger';
 import { getClient } from '../utils/db';
 import * as serviceQuery from '../queries/service';

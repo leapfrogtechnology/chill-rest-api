@@ -1,8 +1,9 @@
 import jwt from 'jsonwebtoken';
+
 import Token from '../models/Token';
 import logger from '../utils/logger';
-import * as config from '../config/config';
 import * as generateTokens from '../jwt';
+import * as config from '../config/config';
 
 /**
 * Fetch a project from projectId.
@@ -67,7 +68,7 @@ export async function generateAccessToken(refresh_token) {
       let accessToken = generateTokens.generateToken(
         result.user_id,
         config.get().auth.accessSaltKey,
-        300
+        config.get().auth.accessTime
       );
 
       return { accessToken };

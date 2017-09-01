@@ -1,5 +1,6 @@
 import Boom from 'boom';
 import jwt from 'jsonwebtoken';
+
 import User from '../models/User';
 import logger from '../utils/logger';
 import * as tokenService from './token';
@@ -36,7 +37,7 @@ export async function loginOrSignUp(data) {
       let accessToken = generateTokens.generateToken(
         userInfo.id,
         config.get().auth.accessSaltKey,
-        300
+        config.get().auth.accessTime
       );
       let id = userInfo.id;
       let tokenData = await tokenService.checkToken(id);
@@ -50,7 +51,7 @@ export async function loginOrSignUp(data) {
         let refreshToken = generateTokens.generateToken(
           userInfo.id,
           config.get().auth.refreshSaltKey,
-          172800
+          config.get().auth.refreshTime
         );
         let tokenTable = {
           userId: userInfo.id,
@@ -67,12 +68,12 @@ export async function loginOrSignUp(data) {
       let accessToken = generateTokens.generateToken(
         userInfo.id,
         config.get().auth.accessSaltKey,
-        300
+        config.get().auth.accessTime
       );
       let refreshToken = generateTokens.generateToken(
         userInfo.id,
         config.get().auth.refreshSaltKey,
-        172800
+        config.get().auth.refreshTime
       );
       let tokenTable = {
         userId: userInfo.id,
