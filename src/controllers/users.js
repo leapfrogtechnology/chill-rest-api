@@ -54,4 +54,5 @@ export function loginOrSignUp(req, res, next) {
     .loginOrSignUp(req.user)
     .then(data => res.json(data))
     .catch(err => next(err));
+  // res.redirect('/profile');
 }

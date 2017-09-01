@@ -4,8 +4,6 @@ import camelize from 'camelize';
 import logger from '../utils/logger';
 import { getClient } from '../utils/db';
 import userProject from './UserProject';
-import * as serviceQuery from '../queries/service';
-import * as userProjectQuery from '../queries/userProject';
 
 const db = getClient();
 

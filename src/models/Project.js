@@ -1,9 +1,9 @@
 import Boom from 'Boom';
-import userProject from './UserProject';
 import camelize from 'camelize';
 
 import logger from '../utils/logger';
 import { getClient } from '../utils/db';
+import userProject from './UserProject';
 import * as projectQuery from '../queries/project';
 
 const db = getClient();
