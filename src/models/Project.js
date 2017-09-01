@@ -1,4 +1,5 @@
 import Boom from 'Boom';
+import userProject from './UserProject';
 import camelize from 'camelize';
 
 import logger from '../utils/logger';
@@ -82,11 +83,15 @@ class Project extends db.Model {
       throw new Boom.notFound('No Project Found');
     }
 
-    await db.knex.raw(projectQuery.DELETE_A_PROJECT_USERPROJECT, { projectId });
+    db.transaction(async transaction => {
+      await userProject
+        .where({ project_id: projectId })
+        .destroy({ transacting: transaction });
 
-    await db.knex.raw(projectQuery.DELETE_A_PROJECT_PROJECTS, { projectId });
-
-    logger().info('project deleted');
+      await Project.forge({ id: projectId }).destroy({
+        transacting: transaction
+      });
+    });
 
     return camelize(results.rows);
   }
@@ -110,11 +115,11 @@ class Project extends db.Model {
     let name = data.name;
     let description = data.description;
 
-    await db.knex.raw(projectQuery.UPDATE_A_PROJECT_PROJECTS, {
-      name,
-      description,
-      projectId
-    });
+    await Project.where({ id: projectId }).save(
+      { name, description },
+      { patch: true }
+    );
+
     let updatedResult = await db.knex.raw(projectQuery.FETCH_A_PROJECT, {
       userId,
       projectId
