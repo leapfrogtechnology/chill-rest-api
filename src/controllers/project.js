@@ -1,33 +1,32 @@
 // Project Controller
 import * as projectService from '../services/project';
 import * as userProjectService from '../services/userProject';
-import jwt from 'jsonwebtoken';
 
-/*
-    Create a Project
-    Returns the project json
+/** 
+ * Create a Project
+ * Returns the project json.
+ * 
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Object} next
 */
-export function create( req, res, next ) {
-  projectService.create( req.body )
-    .then(data =>{
-            // Call userproject service to map user and project
-      let head = req.headers.authorization.split(' ')[1];
-      let value = jwt.decode(head);
+export function create(req, res, next) {
+  projectService
+    .create(req.body)
+    .then(data => {
       let userProjectData = {
         projectId: data.id,
-        userId: value.userId
+        userId: req.userId
       };
-      // res.json(userProjectData);
 
-      userProjectService.create(userProjectData)
-        .then(userprojectreturn =>{
-          let totalData = {
-            projectData: data,
-            userProjectData: userprojectreturn
-          };
+      userProjectService.create(userProjectData).then(userprojectreturn => {
+        let totalData = {
+          projectData: data,
+          userProjectData: userprojectreturn
+        };
 
-          res.json(totalData);
-        });
+        res.json(totalData);
+      });
     })
     .catch(err => next(err));
 }
@@ -40,10 +39,8 @@ export function create( req, res, next ) {
  * @param {Object} next
  */
 export function get(req, res, next) {
-  let head = req.headers.authorization.split(' ')[1];
-  let value = jwt.decode(head);
-
-  projectService.fetch(value.userId, req.params.projectid)
+  projectService
+    .fetch(req.userId, req.params.projectId)
     .then(data => res.json(data))
     .catch(err => next(err));
 }
@@ -56,15 +53,12 @@ export function get(req, res, next) {
  * @param {Object} next
  */
 
-export function showAll( req, res, next ) {
-  let head = req.headers.authorization.split(' ')[1];
-  let value = jwt.decode(head);
-
-  projectService.fetchAll(value.userId)
+export function showAll(req, res, next) {
+  projectService
+    .fetchAll(req.userId)
     .then(data => res.json(data))
     .catch(err => next(err));
 }
-
 
 /*
  * Delete a project of user
@@ -73,11 +67,9 @@ export function showAll( req, res, next ) {
  * @param {Object} res
  * @param {Object} next
  */
-export function deleteProject( req , res , next ) {
-  let head = req.headers.authorization.split(' ')[1];
-  let value = jwt.decode(head);
-  
-  projectService.deleteProject(value.userId, req.params.projectid )
+export function deleteProject(req, res, next) {
+  projectService
+    .deleteProject(req.userId, req.params.projectId)
     .then(data => res.json(data))
     .catch(err => next(err));
 }
@@ -89,11 +81,9 @@ export function deleteProject( req , res , next ) {
  * @param {Object} res
  * @param {Object} next
  */
-export function updateProject( req , res , next ) {
-  let head = req.headers.authorization.split(' ')[1];
-  let value = jwt.decode(head);
-
-  projectService.updateProject( value.userId, req.params.projectid , req.body )
+export function updateProject(req, res, next) {
+  projectService
+    .updateProject(req.userId, req.params.projectId, req.body)
     .then(data => res.json(data))
     .catch(err => next(err));
- }
+}

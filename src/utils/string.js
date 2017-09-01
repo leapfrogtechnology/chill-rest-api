@@ -1,4 +1,3 @@
-
 /**
  * Justify (center) the text in the provided `width` by adding
  * padding on the left and right of the text using the `fillchar`.
@@ -24,7 +23,8 @@ export function center(text, width, fillchar = ' ') {
   let paddingRight = remainingSpace - paddingLeft;
 
   // Add padding left & right using the fillchar character.
-  let result = fillchar.repeat(paddingLeft) + orignalText + fillchar.repeat(paddingRight);
+  let result =
+    fillchar.repeat(paddingLeft) + orignalText + fillchar.repeat(paddingRight);
 
   return result;
 }

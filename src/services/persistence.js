@@ -1,6 +1,5 @@
-import { differenceWith } from 'lodash';
-
 import logger from '../utils/logger';
+import { differenceWith } from 'lodash';
 import Service from '../models/Service';
 import * as config from '../config/config';
 import * as serviceService from './service';
@@ -57,7 +56,7 @@ async function persist(diff) {
 
   // Fetch the list of services again.
   let data = await Service.fetchAll();
-  let created = (persistingPromises.length > 0);
+  let created = persistingPromises.length > 0;
 
   return {
     created,
@@ -73,8 +72,16 @@ async function persist(diff) {
  * @returns
  */
 function computeDiff(configuredServices, persistedServices) {
-  const notPersisted = differenceWith(configuredServices, persistedServices, comparator);
-  const notRequired = differenceWith(persistedServices, configuredServices, comparator);
+  const notPersisted = differenceWith(
+    configuredServices,
+    persistedServices,
+    comparator
+  );
+  const notRequired = differenceWith(
+    persistedServices,
+    configuredServices,
+    comparator
+  );
 
   return { notPersisted, notRequired };
 }

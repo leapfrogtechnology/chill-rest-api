@@ -1,68 +1,79 @@
+import jwt from 'jsonwebtoken';
+
 import Token from '../models/Token';
 import logger from '../utils/logger';
 import * as generateTokens from '../jwt';
-import jwt from 'jsonwebtoken';
+import * as config from '../config/config';
 
 /**
- *insert token data into the table "tokens"
- * 
- */
+* Fetch a project from projectId.
+*
+* @param  {Object} data
+*/
 export async function createToken(data) {
   try {
-    let token = await Token.create(data);
-  }
-  catch (err) {
-    logger().error('Error while trying to enter token data into the Token table');
+    await Token.create(data);
+  } catch (err) {
+    logger().error(
+      'Error while trying to enter token data into the Token table'
+    );
   }
 }
 
 /**
- * fetch token data from the table "tokens" using given refreshToken
- * 
- */
+* Fetch refresh token information using refreshToken.
+*
+* @param  {string}  refreshToken
+* @return {Promise}
+*/
 export async function fetchToken(refresh_token) {
   try {
     let result = await new Token({ refresh_token }).fetch();
+
     return result;
-  }
-  catch (err) {
-    throw (err);
+  } catch (err) {
+    throw err;
   }
 }
 
 /**
- *fetch token data from the table "tokens" using userId
- * 
- */
+* Fetch a token from user_id.
+*
+* @param  {number}  user_id
+* @return {Promise}
+*/
 export async function checkToken(user_id) {
   try {
     let result = await new Token({ user_id }).fetch();
-    
+
     return result;
-  }
-  catch (err) {
-    throw (err);
+  } catch (err) {
+    throw err;
   }
 }
 
 /**
- * Function to generate new access token when it expires, after validating the refresh token
- * 
- */
+* Generate new access token, if given refresh token is in database.
+*
+* @param  {string} refresh_token 
+* @return {Promise}
+*/
 export async function generateAccessToken(refresh_token) {
   try {
     let result = await fetchToken(refresh_token);
     let refreshToken = result.refresh_token;
 
-    jwt.verify(refreshToken, 'REFRESH');
+    jwt.verify(refreshToken, config.get().auth.refreshSaltKey);
     if (result) {
-      let accessToken = generateTokens.generateToken(result.user_id, 'RESTFULAPI', 300);
+      let accessToken = generateTokens.generateToken(
+        result.user_id,
+        config.get().auth.accessSaltKey,
+        config.get().auth.accessTime
+      );
 
-      
-      return ({ accessToken });
+      return { accessToken };
     }
-  }
-  catch (err) {
-    throw (err);
+  } catch (err) {
+    throw err;
   }
 }

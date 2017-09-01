@@ -26,7 +26,10 @@ function customFormatter(options, config) {
   const log = {
     level: formatLevel(level, levelColumnWidth),
     message: message || '',
-    meta: meta && Object.keys(meta).length ? '\n' + JSON.stringify(options.meta, null, 4) : ''
+    meta:
+      meta && Object.keys(meta).length
+        ? '\n' + JSON.stringify(options.meta, null, 4)
+        : ''
   };
 
   return `${new Date().toISOString()} [${log.level}]  ${log.message}  ${log.meta}`;
@@ -53,17 +56,11 @@ let instance;
  * @returns {winston.Logger}
  */
 function createLogger(config) {
-  const {
-    level,
-    logDir,
-    maxFiles,
-    jsonFormat,
-    dateFormat
-  } = config;
+  const { level, logDir, maxFiles, jsonFormat, dateFormat } = config;
 
   createDirectory(logDir);
 
-  let logger = new (winston.Logger)({
+  let logger = new winston.Logger({
     transports: [
       new winston.transports.Console({
         level: level,

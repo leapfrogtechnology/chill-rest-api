@@ -17,12 +17,35 @@ export default {
   db: {
     client: 'sqlite3',
     connection: {
-      filename: null
+      filename: null,
+      database: null
     },
     useNullAsDefault: true
   },
+  //  PostgreSQL Database Configuration
+  // db: {
+  //   client: 'pg',
+  //   connection: {
+  //     charset: 'utf8',
+  //     database: null,
+  //     host: 127.0.0.1,
+  //     user: null,
+  //     password: null
+  //   }
+  // },
   restApi: {
     port: 8000
+  },
+  auth: {
+    accessSaltKey: null,
+    refreshSaltKey: null,
+    accessTime: 300,
+    refreshTime: 172800,
+    googleAuth: {
+      clientID: null,
+      clientSecret: null,
+      callbackURL: 'http://localhost:8000/api/auth/google/callback'
+    }
   },
   monitoring: {
     method: 'OPTIONS',

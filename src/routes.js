@@ -1,65 +1,98 @@
 import { Router } from 'express';
 
-import { validateStatusLog } from './validators/statusLog';
-
 import * as homeController from './controllers/home';
+import * as userController from './controllers/users';
+import { getPassportInstance } from './utils/passport';
+import * as authenticate from './middlewares/checkToken';
 import * as statusController from './controllers/status';
 import * as serviceController from './controllers/service';
-import * as statusLogController from './controllers/statusLog';
-import profile from './controllers/profile';
-import * as userController from './controllers/users'; 
 import * as projectController from './controllers/project';
-import passport from 'passport';
-import passportConfig from './config/passport';
-import * as authenticate from './middlewares/checkToken';
+import { validateStatusLog } from './validators/statusLog';
+import * as statusLogController from './controllers/statusLog';
 
-passportConfig(passport);
 const router = Router();
 
-router.use('/profile', authenticate.authenticate, profile);
-router.use(passport.initialize());
-// router.use(passport.session());
-router.get('/swagger.json', homeController.getSwaggerSpec);
+router.use(getPassportInstance().initialize());
+
 router.get('/', homeController.getAppInfo);
+router.get('/swagger.json', homeController.getSwaggerSpec);
 router.get('/user/:id', userController.get);
 
-// Current status of services
 router.get('/status', statusLogController.getLatestStatus);
 
-// Status Change logs
-router.get('/status/logs', statusLogController.getAll);
-router.post('/status/logs', validateStatusLog, statusLogController.save); // TODO: Auth Token
+router.get('/projects/:projectId/status/logs', statusLogController.getAll);
+router.post(
+  '/projects/:projectId/status',
+  validateStatusLog,
+  statusLogController.save
+);
+router.get(
+  '/self/projects',
+  authenticate.authenticate,
+  projectController.showAll
+);
 
-// Services
-router.get('/services', serviceController.getAll);
-router.get('/services/:id(\\d+)', serviceController.get);
-router.get('/services/:id(\\d+)/status', serviceController.getServiceStatus);
+router.post(
+  '/self/projects',
+  authenticate.authenticate,
+  projectController.create
+);
+router.get(
+  '/self/projects/:projectId(\\d+)',
+  authenticate.authenticate,
+  projectController.get
+);
+router.put(
+  '/self/projects/:projectId(\\d+)',
+  authenticate.authenticate,
+  projectController.updateProject
+);
+router.delete(
+  '/self/projects/:projectId(\\d+)',
+  authenticate.authenticate,
+  projectController.deleteProject
+);
 
-// Statuses
+router.get(
+  '/self/projects/:id(\\d+)/services',
+  authenticate.authenticate,
+  serviceController.getAll
+);
+router.post(
+  '/self/projects/:id(\\d+)/services',
+  authenticate.authenticate,
+  serviceController.create
+);
+router.get(
+  '/self/projects/:id(\\d+)/services/:serviceId(\\d+)',
+  authenticate.authenticate,
+  serviceController.get
+);
+router.put(
+  '/self/projects/:projectId(\\d+)/services/:serviceId(\\d+)',
+  authenticate.authenticate,
+  serviceController.updateService
+);
+router.delete(
+  '/self/projects/:projectId(\\d+)/services/:serviceId(\\d+)',
+  authenticate.authenticate,
+  serviceController.deleteService
+);
+
 router.get('/statuses', statusController.getAll);
 
-// Google Signup with Passport
-router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+router.get('/status', serviceController.getServiceStatus);
 
-// Callback URL after signup
-router.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), 
+router.get(
+  '/auth/google',
+  getPassportInstance().authenticate('google', { scope: ['profile', 'email'] })
+);
+router.get(
+  '/auth/google/callback',
+  getPassportInstance().authenticate('google', { failureRedirect: '/login' }),
   userController.loginOrSignUp
 );
 
-// Add a new project of a user
-router.post('/self/addProject', authenticate.authenticate, projectController.create);
-
-// CRUD
-// Retrieve all projects of a user
-router.get('/self/projects', authenticate.authenticate, projectController.showAll);
-
-// Retrieve a project from userId and projectID
-router.get('/self/projects/:projectid', authenticate.authenticate, projectController.get);
-
-// Delete a project of projectID
-router.get('/self/projects/:projectid/delete', authenticate.authenticate, projectController.deleteProject);
-
-// Update a project of projectID
-router.post('/self/projects/:projectid/update', authenticate.authenticate, projectController.updateProject);
+router.get('/services/:id(\\d+)/status', serviceController.getServiceStatus);
 
 export default router;

@@ -1,43 +1,72 @@
-import * as tokenServices from '../services/token';
 import jwt from 'jsonwebtoken';
+import HttpStatus from 'http-status-codes';
 
-/*
-to authenticate the access token
-*/
-export async function authenticate( req, res, next) {
-  let token = req.headers.authorization;
-  let head = req.headers.authorization.split(' ')[1];
-  let value = jwt.verify(head, 'RESTFULAPI');
+import * as config from '../config/config';
+import * as tokenServices from '../services/token';
 
-  if (!value) {
-    res.json({
-      message: 'The given token is invalid.'
-    });
+/**
+ * Access Token authentication middleware function. Error response for middleware 401 UNAUTHORIZED.
+ *
+ * @param  {object}   req
+ * @param  {object}   res
+ * @param  {function} next
+ */
+export async function authenticate(req, res, next) {
+  if (!req.header('Authorization')) {
+    return res
+      .status(HttpStatus.UNAUTHORIZED)
+      .json({ message: 'Authorization header not present.' });
   }
-  if (value) {
-    next();
+  const token = req.headers.authorization.split(' ')[1];
+  let tokenPayload;
+
+  try {
+    tokenPayload = jwt.verify(token, config.get().auth.accessSaltKey);
+  } catch (err) {
+    return res
+      .status(HttpStatus.UNAUTHORIZED)
+      .json({ message: 'Invalid authorization token.' });
   }
+  req.userId = tokenPayload.userId;
+  next();
 }
 
-/*
-to authenticate the refresh token
-*/
-export async function authenticateRefreshToken( req, res, next) {
+/**
+ * Refresh Token authentication middleware function for new access token generation. Error response for middleware 401 UNAUTHORIZED.
+ *
+ * @param  {object}   req
+ * @param  {object}   res
+ * @param  {function} next
+ */
+
+export async function authenticateRefreshToken(req, res, next) {
   const userId = req.params.userId;
 
-  let tokenData = tokenServices.fetchToken(userId);
+  if (!req.body.refreshToken) {
+    return res
+      .status(HttpStatus.UNAUTHORIZED)
+      .json({ message: 'Refresh Token not present.' });
+  }
 
-  if (tokenData) {
+  try {
+    let tokenData = await tokenServices.fetchToken(userId);
+
     let refreshToken = tokenData.refresh_token;
-    let value = jwt.verify(refreshToken, 'REFRESH');
 
-    if (value) {
-      next();
+    if (!refreshToken) {
+      return res
+        .status(HttpStatus.UNAUTHORIZED)
+        .json({ message: 'Invalid refresh token.' });
     }
-    else {
-      res.json({
-        message: 'The refresh token provided is no longer valid.'
-      });
-    }
+    let tokenPayload = jwt.verify(
+      refreshToken,
+      config.get().auth.refreshSaltKey
+    );
+
+    req.userId = tokenPayload.userId;
+
+    return next();
+  } catch (err) {
+    return next(err);
   }
 }

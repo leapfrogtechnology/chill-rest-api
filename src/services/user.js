@@ -1,22 +1,21 @@
-import User from '../models/User';
 import Boom from 'boom';
+import jwt from 'jsonwebtoken';
+
+import User from '../models/User';
 import logger from '../utils/logger';
 import * as tokenService from './token';
 import * as generateTokens from '../jwt';
-import jwt from 'jsonwebtoken';
+import * as config from '../config/config';
 
 /**
  * Create new user in database.
  *
- * @param {string}
- * @returns {Promise}
+ * @param {Object} data
  */
 export async function createUser(data) {
   try {
-    let user = await User.create(data);
-    // return userData.toJSON();
-  }
-  catch (err) {
+    await User.create(data);
+  } catch (err) {
     logger().error('Error while trying to enter data into the User table');
   }
 }
@@ -25,45 +24,67 @@ export async function createUser(data) {
  * Check the database to see if user exists and if exists, return token. 
  * Otherwise, create new user in database and return token.
  *
- * @param {string}
+ * @param {Object} data
  * @returns {Promise}
  */
 
 export async function loginOrSignUp(data) {
   try {
-
     let email = data.email;
     let userInfo = await fetchByEmail(email);
 
-    console.log(userInfo);
-
     if (userInfo) {
-      let accessToken = generateTokens.generateToken(userInfo.id, 'RESTFULAPI', 300);
+      let accessToken = generateTokens.generateToken(
+        userInfo.id,
+        config.get().auth.accessSaltKey,
+        config.get().auth.accessTime
+      );
       let id = userInfo.id;
-      let tokenData = await tokenService.checkToken(id);    
+      let tokenData = await tokenService.checkToken(id);
       let refreshToken = tokenData.attributes.refreshToken;
-      let decode=jwt.decode(refreshToken);
-      console.log(decode);
+      let divisor = Date.now() / 1000;
+      let expiryTime = jwt.decode(refreshToken).exp;
 
-      logger().debug('Retrieved user data', userInfo.toJSON());
-      return ({ accessToken, refreshToken });
-    }
-    else {
-      let user = await createUser(data);
+      if (expiryTime > divisor) {
+        return { accessToken, refreshToken };
+      } else {
+        let refreshToken = generateTokens.generateToken(
+          userInfo.id,
+          config.get().auth.refreshSaltKey,
+          config.get().auth.refreshTime
+        );
+        let tokenTable = {
+          userId: userInfo.id,
+          refreshToken: refreshToken
+        };
+
+        tokenService.createToken(tokenTable);
+
+        return { accessToken, refreshToken };
+      }
+    } else {
+      await createUser(data);
       let userInfo = await fetchByEmail(data.email);
-      let accessToken = generateTokens.generateToken(userInfo.id, 'RESTFULAPI', 300);
-      let refreshToken = generateTokens.generateToken(userInfo.id, 'REFRESH', 172800);
+      let accessToken = generateTokens.generateToken(
+        userInfo.id,
+        config.get().auth.accessSaltKey,
+        config.get().auth.accessTime
+      );
+      let refreshToken = generateTokens.generateToken(
+        userInfo.id,
+        config.get().auth.refreshSaltKey,
+        config.get().auth.refreshTime
+      );
       let tokenTable = {
-        refreshToken: refreshToken,
-        userId: userInfo.id
+        userId: userInfo.id,
+        refreshToken: refreshToken
       };
 
       tokenService.createToken(tokenTable);
-      
-      return ({ accessToken, refreshToken });
+
+      return { accessToken, refreshToken };
     }
-  }  
-  catch (err) {
+  } catch (err) {
     logger().error('Error while trying to log in');
   }
 }
@@ -71,19 +92,16 @@ export async function loginOrSignUp(data) {
 /**
  * Fetch User by email.
  *
- * @param {string}
+ * @param {string} email
  * @returns {Promise}
  */
 export async function fetchByEmail(email) {
   logger().debug('Fetching a user by email', { email });
- 
   try {
     let result = await new User({ email }).fetch();
 
-    
     return result;
-  } 
-  catch (err) {
+  } catch (err) {
     throw err;
   }
 }
@@ -91,7 +109,7 @@ export async function fetchByEmail(email) {
 /**
  * Fetch User from id.
  *
- * @param {string}
+ * @param {Number} id
  * @returns {Promise}
  */
 export async function fetchById(id) {
@@ -102,8 +120,7 @@ export async function fetchById(id) {
   if (!result) {
     throw new Boom.notFound('User not found');
   }
-
   logger().debug('Retrieved user data', result.toJSON());
-  
+
   return result;
 }

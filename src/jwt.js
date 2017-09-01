@@ -1,18 +1,21 @@
-// JWT
 import jwt from 'jsonwebtoken';
 
 /**
- *generate jwt tokens
- * 
- */
+* Generate new Token using userId, Salt key and time (in seconds).
+*
+* @param  {Number}  userId
+* @return {string|Number} 
+*/
 export function generateToken(userId, secret, time) {
   return jwt.sign({ userId }, secret, { expiresIn: time + 's' });
 }
 
 /**
- *verify the jwt token
- * 
- */
+* Verify the Token by decoding the token and comparing with the Salt key
+*
+* @param  {string|Number}  Token
+* @return {Promise}
+*/
 export function verifyToken(token, secret) {
   return jwt.verify(token, secret);
 }

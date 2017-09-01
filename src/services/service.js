@@ -4,38 +4,32 @@ import Service from '../models/Service';
 import StatusLog from '../models/StatusLog';
 
 /**
- * Fetch all services.
+ * Fetch all services of user.
  *
  * @return {Promise}
  */
-export async function fetchAll() {
-  logger().info('Fetching all the services.');
-
-  let result = await Service.fetchAll();
-
-  logger().debug('Retrieved list of services', result.toJSON());
-
-  return result;
+export async function fetchAll(id, userId) {
+  return Service.fetchAll(id, userId);
 }
 
 /**
  * Fetch a single service by it's id (pk).
  *
- * @param  {string|Number}  id
+ * @param  {string|Number}  projectId, serviceId and userId
  * @return {Promise}
  */
-export async function fetch(id) {
-  logger().debug('Fetching a service by id', { id });
+export async function fetch(projectid, serviceid, userId) {
+  return Service.get(projectid, serviceid, userId);
+}
 
-  let result = await new Service({ id }).fetch();
-
-  if (!result) {
-    throw new Boom.notFound('Service not found');
-  }
-
-  logger().debug('Retrieved service data', result.toJSON());
-
-  return result;
+/**
+ * delete a single service by it's projectId.
+ *
+ * @param  {string|Number}  projectId, serviceId and userId
+ * @return {Promise}
+ */
+export async function deleteService(projectId, serviceId, userId) {
+  return Service.deleteService(projectId, serviceId, userId);
 }
 
 /**
@@ -48,7 +42,9 @@ export async function fetchStatus(serviceId) {
   let result = await StatusLog.fetchServiceStatus(serviceId);
 
   if (!result) {
-    throw new Boom.notFound(`No recent logs not found for service ${serviceId}.`);
+    throw new Boom.notFound(
+      `No recent logs not found for service ${serviceId}.`
+    );
   }
 
   logger().debug('Retrieved last logged status:', result.toJSON());
@@ -72,3 +68,12 @@ export async function create(data) {
   }
 }
 
+/**
+ * Update and save service data.
+ *
+ * @param projectId, serviceId, data and userId
+ * @returns {Promise}
+ */
+export async function updateService(projectId, serviceId, data, userId) {
+  return Service.updateService(projectId, serviceId, data, userId);
+}

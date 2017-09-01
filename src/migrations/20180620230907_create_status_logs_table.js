@@ -9,10 +9,22 @@ import { UNKNOWN } from '../models/Status';
 export function up(knex) {
   return knex.schema.createTable('status_logs', table => {
     table.increments().primary();
-    table.integer('service_id').notNullable()
-      .references('id').inTable('services');
-    table.integer('status_id').notNullable()
-      .defaultTo(UNKNOWN).references('id').inTable('statuses');
+    table
+      .integer('service_id')
+      .notNullable()
+      .references('id')
+      .inTable('services');
+    table
+      .integer('project_id')
+      .notNullable()
+      .references('id')
+      .inTable('projects');
+    table
+      .integer('status_id')
+      .notNullable()
+      .defaultTo(UNKNOWN)
+      .references('id')
+      .inTable('statuses');
     // This will store the full http response object as JSON
     // which would help in debugging.
     table.json('response').nullable();

@@ -29,28 +29,24 @@ class StatusLog extends db.Model {
     return new StatusLog({ serviceId }).orderBy('created_at', 'DESC').fetch();
   }
 
-  static fetchAllLogs() {
+  static fetchAllLogs(projectId) {
     logger().info('Fetching all status logs');
 
-    return StatusLog
-      .collection()
+    return StatusLog.collection()
       .query(qb => qb.orderBy('created_at', 'DESC'))
       .fetch({
         debug: true,
         withRelated: ['status', 'service']
       })
+      .where({ project_id: projectId })
       .then(collection => collection.toJSON());
   }
 
   static fetchLatestStatuses() {
     logger().info('Fetching the latest status');
 
-    return StatusLog
-      .collection()
-      .query(qb =>
-        qb.groupBy('service_id')
-          .orderBy('created_at', 'DESC')
-      )
+    return StatusLog.collection()
+      .query(qb => qb.groupBy('service_id').orderBy('created_at', 'DESC'))
       .fetch({
         debug: true,
         withRelated: ['status', 'service']
