@@ -1,8 +1,7 @@
-import passport from 'passport';
 import { Router } from 'express';
-import passportConfig from './config/passport';
 import * as homeController from './controllers/home';
 import * as userController from './controllers/users';
+import { getPassportInstance } from './utils/passport';
 import * as authenticate from './middlewares/checkToken';
 import * as statusController from './controllers/status';
 import * as serviceController from './controllers/service';
@@ -12,9 +11,7 @@ import * as statusLogController from './controllers/statusLog';
 
 const router = Router();
 
-passportConfig(passport);
-
-router.use(passport.initialize());
+router.use(getPassportInstance().initialize());
 
 router.get('/', homeController.getAppInfo);
 router.get('/swagger.json', homeController.getSwaggerSpec);
@@ -28,7 +25,7 @@ router.post(
   validateStatusLog,
   statusLogController.save
 );
-router.get( 
+router.get(
   '/self/projects',
   authenticate.authenticate,
   projectController.showAll
@@ -86,11 +83,11 @@ router.get('/status', serviceController.getServiceStatus);
 
 router.get(
   '/auth/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] })
+  getPassportInstance().authenticate('google', { scope: ['profile', 'email'] })
 );
 router.get(
   '/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/login' }),
+  getPassportInstance().authenticate('google', { failureRedirect: '/login' }),
   userController.loginOrSignUp
 );
 

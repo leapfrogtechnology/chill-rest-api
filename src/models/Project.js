@@ -1,17 +1,18 @@
-import Boom from "Boom";
-import camelize from "camelize";
-import logger from "../utils/logger";
-import { getClient } from "../utils/db";
-import * as projectQuery from "../queries/project";
+import Boom from 'Boom';
+import userProject from './UserProject';
+import camelize from 'camelize';
+import logger from '../utils/logger';
+import { getClient } from '../utils/db';
+import * as projectQuery from '../queries/project';
 
 const db = getClient();
 
-export const TYPE_HTTP = "http";
-export const TYPE_TCP = "tcp";
+export const TYPE_HTTP = 'http';
+export const TYPE_TCP = 'tcp';
 
 class Project extends db.Model {
   get tableName() {
-    return "projects";
+    return 'projects';
   }
 
   get hasTimestamps() {
@@ -30,18 +31,18 @@ class Project extends db.Model {
       description: data.description
     });
 
-    logger().info("Creating a new project");
-    logger().debug("Project data", data);
+    logger().info('Creating a new project');
+    logger().debug('Project data', data);
 
     await project.save();
 
-    logger().info("Project created", { id: project.get("id") });
+    logger().info('Project created', { id: project.get('id') });
 
     return project;
   }
 
   static async fetchAll(id) {
-    logger().info("Fetching the projects of user", { id });
+    logger().info('Fetching the projects of user', { id });
     let results = await db.knex.raw(projectQuery.FETCH_All_PROJECTS, {
       id
     });
@@ -51,9 +52,9 @@ class Project extends db.Model {
 
   static async fetchAProject(userId, projectId) {
     logger().info(
-      "Fetching a project of user",
+      'Fetching a project of user',
       { userId },
-      "where projectId is",
+      'where projectId is',
       { projectId }
     );
     let results = await db.knex.raw(projectQuery.FETCH_A_PROJECT, {
@@ -66,9 +67,9 @@ class Project extends db.Model {
 
   static async deleteProject(userId, projectId) {
     logger().info(
-      "Deleting a project of user",
+      'Deleting a project of user',
       { userId },
-      "where projectId is",
+      'where projectId is',
       { projectId }
     );
     let results = await db.knex.raw(projectQuery.FETCH_A_PROJECT, {
@@ -77,31 +78,27 @@ class Project extends db.Model {
     });
 
     if (results.rowCount === 0) {
-      throw new Boom.notFound("No Project Found");
+      throw new Boom.notFound('No Project Found');
     }
 
-    try {
-      await db
-        .knex("user_project")
-        .where("project_id", projectId)
-        .del();
-      await db
-        .knex("projects")
-        .where("id", projectId)
-        .del();
-    } catch (err) {
-      logger().error("Error while deleting the project", err);
-    }
-    logger().info("project deleted");
+    db.transaction(async transaction => {
+      await userProject
+        .where({ project_id: projectId })
+        .destroy({ transacting: transaction });
+
+      await Project.forge({ id: projectId }).destroy({
+        transacting: transaction
+      });
+    });
 
     return camelize(results.rows);
   }
 
   static async updateProject(userId, projectId, data) {
     logger().info(
-      "Updating a project of user",
+      'Updating a project of user',
       { userId },
-      "where projectId is",
+      'where projectId is',
       { projectId }
     );
     let results = await db.knex.raw(projectQuery.FETCH_A_PROJECT, {
@@ -110,23 +107,23 @@ class Project extends db.Model {
     });
 
     if (results.rowCount === 0) {
-      throw new Boom.notFound("No Project Found");
+      throw new Boom.notFound('No Project Found');
     }
 
     let name = data.name;
     let description = data.description;
 
-    await db.knex.raw(projectQuery.UPDATE_A_PROJECT_PROJECTS, {
-      name,
-      description,
-      projectId
-    });
+    await Project.where({ id: projectId }).save(
+      { name, description },
+      { patch: true }
+    );
+
     let updatedResult = await db.knex.raw(projectQuery.FETCH_A_PROJECT, {
       userId,
       projectId
     });
 
-    logger().info("project updated");
+    logger().info('project updated');
 
     return camelize(updatedResult.rows);
   }

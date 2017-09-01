@@ -2,6 +2,7 @@ import Boom from 'Boom';
 import camelize from 'camelize';
 import logger from '../utils/logger';
 import { getClient } from '../utils/db';
+import userProject from './UserProject';
 import * as serviceQuery from '../queries/service';
 import * as userProjectQuery from '../queries/userProject';
 
@@ -9,6 +10,10 @@ const db = getClient();
 
 export const TYPE_HTTP = 'http';
 export const TYPE_TCP = 'tcp';
+
+function checkIfMAtch(userId, projectId) {
+  return userProject.where({ user_id: userId, project_id: projectId }).fetch();
+}
 
 class Service extends db.Model {
   get tableName() {
@@ -48,23 +53,24 @@ class Service extends db.Model {
     let ifMatch;
 
     try {
-      ifMatch = await db.knex.raw(userProjectQuery.CHECK_USER_PROJECT, {
-        userId,
-        projectId
-      });
+      ifMatch = await checkIfMAtch(userId, projectId);
     } catch (err) {
       logger().error('Error while persisting the service into database', err);
     }
-
-    if (ifMatch.rowCount !== 0) {
+    if (ifMatch != null) {
       logger().info('Fetching the services of projects of project id', {
         projectId
       });
-      let results = await db.knex.raw(serviceQuery.FETCH_All_SERVICE, {
-        projectId
-      });
-
-      return camelize(results.rows);
+      try {
+        let results = await Service.where({ project_id: projectId }).fetchAll();
+        let data = [];
+        for (let i = 0; i < results.length; i++) {
+          data[i] = results.models[i].attributes;
+        }
+        return camelize(data);
+      } catch (err) {
+        throw new Boom.notFound('no service found');
+      }
     } else {
       throw new Boom.notFound('User and Project are not related');
     }
@@ -75,21 +81,21 @@ class Service extends db.Model {
     let ifMatch;
 
     try {
-      ifMatch = await db.knex.raw(userProjectQuery.CHECK_USER_PROJECT, {
-        userId,
-        projectId
-      });
+      ifMatch = await checkIfMAtch(userId, projectId);
     } catch (err) {
       logger().error('Error while persisting the service into database', err);
     }
-    if (ifMatch.rowCount !== 0) {
-      logger().info('Fetching the service', { serviceId });
-      let results = await db.knex.raw(serviceQuery.FETCH_A_SERVICE, {
-        serviceId,
-        projectId
-      });
-
-      return camelize(results.rows);
+    if (ifMatch != null) {
+      try {
+        logger().info('Fetching the service', { serviceId });
+        let results = await Service.where({
+          id: serviceId,
+          project_id: projectId
+        }).fetch();
+        return camelize(results.attributes);
+      } catch (err) {
+        throw new Boom.notFound('no service found');
+      }
     } else {
       throw new Boom.notFound('User and Project are not related');
     }
@@ -100,30 +106,26 @@ class Service extends db.Model {
     let ifMatch;
 
     try {
-      ifMatch = await db.knex.raw(userProjectQuery.CHECK_USER_PROJECT, {
-        userId,
-        projectId
-      });
+      ifMatch = await checkIfMAtch(userId, projectId);
     } catch (err) {
       logger().error('Error while persisting the service into database', err);
     }
 
-    if (ifMatch.rowCount !== 0) {
+    if (ifMatch != null) {
       logger().info('Fetching the service', { serviceId });
-      let result = await db.knex.raw(serviceQuery.FETCH_A_SERVICE, {
-        serviceId,
-        projectId
-      });
 
-      if (!result) {
+      let result = await Service.where({
+        id: serviceId,
+        project_id: projectId
+      }).fetch();
+
+      if (result == null) {
         throw new Boom.notFound('No service found under the project');
       }
-      await db.knex.raw(serviceQuery.DELETE_A_SERVICE, {
-        serviceId,
-        projectId
-      });
 
-      return camelize(result.rows);
+      await Service.where({ id: serviceId, project_id: projectId }).destroy();
+
+      return camelize(result.attributes);
     } else {
       throw new Boom.notFound('User and Project are not related');
     }
@@ -134,27 +136,23 @@ class Service extends db.Model {
     let ifMatch;
 
     try {
-      ifMatch = await db.knex.raw(userProjectQuery.CHECK_USER_PROJECT, {
-        userId,
-        projectId
-      });
+      ifMatch = await checkIfMAtch(userId, projectId);
     } catch (err) {
       logger().error('Error while persisting the service into database', err);
     }
 
-    if (ifMatch.rowCount !== 0) {
+    if (ifMatch != null) {
       logger().info(
         'Updating a service of project',
         { projectId },
         'where serviceId is',
         { serviceId }
       );
-      let results = await db.knex.raw(serviceQuery.FETCH_A_SERVICE, {
-        serviceId,
-        projectId
-      });
-
-      if (results.rowCount === 0) {
+      let results = await Service.where({
+        id: serviceId,
+        project_id: projectId
+      }).fetch();
+      if (results == null) {
         throw new Boom.notFound('No Service Found');
       }
 
@@ -162,21 +160,26 @@ class Service extends db.Model {
       let url = data.url;
       let type = data.type;
 
-      await db.knex.raw(serviceQuery.UPDATE_A_SERVICE_SERVICES, {
-        name,
-        url,
-        type,
-        serviceId,
-        projectId
-      });
-      let updatedResult = await db.knex.raw(serviceQuery.FETCH_A_SERVICE, {
-        serviceId,
-        projectId
-      });
+      await Service.where({
+        id: serviceId,
+        project_id: projectId
+      }).save(
+        {
+          name,
+          url,
+          type
+        },
+        { patch: true }
+      );
+
+      let updatedResult = await Service.where({
+        id: serviceId,
+        project_id: projectId
+      }).fetch();
 
       logger().info('service updated');
 
-      return camelize(updatedResult.rows);
+      return camelize(updatedResult.attributes);
     } else {
       throw new Boom.notFound('User and Project are not related');
     }
