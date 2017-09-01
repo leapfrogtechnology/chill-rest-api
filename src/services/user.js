@@ -27,7 +27,6 @@ export async function createUser(data) {
  * @param {Object} data
  * @returns {Promise}
  */
-
 export async function loginOrSignUp(data) {
   try {
     let email = data.email;
