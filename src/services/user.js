@@ -36,7 +36,7 @@ export async function loginOrSignUp(data) {
       let accessToken = generateTokens.generateToken(
         userInfo.id,
         config.get().auth.accessSaltKey,
-        30000
+        300
       );
       let id = userInfo.id;
       let tokenData = await tokenService.checkToken(id);
@@ -67,7 +67,7 @@ export async function loginOrSignUp(data) {
       let accessToken = generateTokens.generateToken(
         userInfo.id,
         config.get().auth.accessSaltKey,
-        30000
+        300
       );
       let refreshToken = generateTokens.generateToken(
         userInfo.id,
