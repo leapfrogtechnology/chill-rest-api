@@ -3,6 +3,7 @@
   "version": "1.0.0-alpha.1",
   "description": "REST API for the chill monitoring service.",
   "scripts": {
+    "precommit": "lint-staged",
     "lint": "eslint src test; exit 0",
     "lint:fix": "eslint src test --fix; exit 0",
     "start": "nodemon --watch src/ --exec babel-node src/ --source-maps",
@@ -13,6 +14,12 @@
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
     "synchronize": "babel-node ./src/scripts/synchronize"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
   },
   "keywords": [
     "chill",
@@ -67,6 +74,8 @@
     "babel-preset-es2017": "^6.24.1",
     "babel-register": "^6.24.1",
     "eslint": "^3.19.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^4.0.4",
     "nodemon": "^1.11.0",
     "rimraf": "^2.6.1",
     "semver": "^5.3.0"
