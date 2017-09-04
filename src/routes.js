@@ -87,7 +87,7 @@ router.get('/status', serviceController.getServiceStatus);
 router.post(
   '/auth/callback',
   tokenValidator.verifyToken,
-  userController.postData
+  userController.loginOrSignUp
 );
 
 router.get(
