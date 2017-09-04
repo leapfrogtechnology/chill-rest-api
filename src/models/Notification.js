@@ -1,17 +1,31 @@
 import { getClient } from '../utils/db';
+import Boom from 'Boom';
+import camelize from 'camelize';
+import logger from '../utils/logger';
 
 const db = getClient();
 
-class Status extends db.Model {
+class NotificatonTypes extends db.Model {
   get tableName() {
-    return 'statuses';
+    return 'notification_types';
   }
-
-  static async create(data) {}
 
   get hasTimestamps() {
     return true;
   }
+
+  /**
+   * 
+   * @param {integer} id 
+   */
+  static async fetch(id) {
+    try {
+      let result = await NotificatonTypes.where({ id }).fetch();
+      return camelize(result.attributes);
+    } catch (err) {
+      return new Boom.notFound('no entry found of the id');
+    }
+  }
 }
 
-export default Status;
+export default NotificatonTypes;

@@ -13,6 +13,7 @@ class NotificatonTypes extends db.Model {
   get hasTimestamps() {
     return true;
   }
+
   /**
    * 
    * @param {integer} id 
