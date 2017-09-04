@@ -9,6 +9,10 @@ import * as projectController from './controllers/project';
 import { validateStatusLog } from './validators/statusLog';
 import * as statusLogController from './controllers/statusLog';
 
+/*test*/
+import NotificationTypes from './models/NotificationTypes';
+/**/
+
 const router = Router();
 
 router.use(getPassportInstance().initialize());
@@ -18,6 +22,14 @@ router.get('/swagger.json', homeController.getSwaggerSpec);
 router.get('/user/:id', userController.get);
 
 router.get('/status', statusLogController.getLatestStatus);
+
+/**/
+router.get('/notificationtypes/:id', function(req, res, next) {
+  NotificationTypes.fetch(req.params.id).then(data => {
+    res.json(data);
+  });
+});
+/**/
 
 router.get('/projects/:projectId/status/logs', statusLogController.getAll);
 router.post(
