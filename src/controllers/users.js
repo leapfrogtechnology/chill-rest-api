@@ -55,8 +55,3 @@ export function loginOrSignUp(req, res, next) {
     .then(data => res.json(data))
     .catch(err => next(err));
 }
-
-// export function postData(req, res, next) {
-//   let data = req.body;
-//   res.json({ data });
-// }

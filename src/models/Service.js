@@ -63,9 +63,11 @@ class Service extends db.Model {
       try {
         let results = await Service.where({ project_id: projectId }).fetchAll();
         let data = [];
+
         for (let i = 0; i < results.length; i++) {
           data[i] = results.models[i].attributes;
         }
+
         return camelize(data);
       } catch (err) {
         throw new Boom.notFound('no service found');
@@ -91,6 +93,7 @@ class Service extends db.Model {
           id: serviceId,
           project_id: projectId
         }).fetch();
+
         return camelize(results.attributes);
       } catch (err) {
         throw new Boom.notFound('no service found');
@@ -118,7 +121,7 @@ class Service extends db.Model {
         project_id: projectId
       }).fetch();
 
-      if (result == null) {
+      if (result === null) {
         throw new Boom.notFound('No service found under the project');
       }
 
@@ -151,7 +154,8 @@ class Service extends db.Model {
         id: serviceId,
         project_id: projectId
       }).fetch();
-      if (results == null) {
+
+      if (results === null) {
         throw new Boom.notFound('No Service Found');
       }
 
