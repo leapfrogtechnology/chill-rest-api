@@ -56,7 +56,7 @@ class Service extends db.Model {
     } catch (err) {
       logger().error('Error while persisting the service into database', err);
     }
-    if (ifMatch != null) {
+    if (ifMatch !== null) {
       logger().info('Fetching the services of projects of project id', {
         projectId
       });
@@ -84,7 +84,7 @@ class Service extends db.Model {
     } catch (err) {
       logger().error('Error while persisting the service into database', err);
     }
-    if (ifMatch != null) {
+    if (ifMatch !== null) {
       try {
         logger().info('Fetching the service', { serviceId });
         let results = await Service.where({
@@ -110,7 +110,7 @@ class Service extends db.Model {
       logger().error('Error while persisting the service into database', err);
     }
 
-    if (ifMatch != null) {
+    if (ifMatch !== null) {
       logger().info('Fetching the service', { serviceId });
 
       let result = await Service.where({
@@ -140,7 +140,7 @@ class Service extends db.Model {
       logger().error('Error while persisting the service into database', err);
     }
 
-    if (ifMatch != null) {
+    if (ifMatch !== null) {
       logger().info(
         'Updating a service of project',
         { projectId },

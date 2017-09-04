@@ -9,6 +9,7 @@ import * as serviceController from './controllers/service';
 import * as projectController from './controllers/project';
 import { validateStatusLog } from './validators/statusLog';
 import * as statusLogController from './controllers/statusLog';
+import * as tokenValidator from './middlewares/verifyGoogleToken';
 
 const router = Router();
 
@@ -83,13 +84,9 @@ router.get('/statuses', statusController.getAll);
 
 router.get('/status', serviceController.getServiceStatus);
 
-router.get(
-  '/auth/google',
-  getPassportInstance().authenticate('google', { scope: ['profile', 'email'] })
-);
-router.get(
-  '/auth/google/callback',
-  getPassportInstance().authenticate('google', { failureRedirect: '/login' }),
+router.post(
+  '/auth/callback',
+  tokenValidator.verifyToken,
   userController.loginOrSignUp
 );
 

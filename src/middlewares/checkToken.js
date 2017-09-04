@@ -17,6 +17,7 @@ export async function authenticate(req, res, next) {
       .status(HttpStatus.UNAUTHORIZED)
       .json({ message: 'Authorization header not present.' });
   }
+
   const token = req.headers.authorization.split(' ')[1];
   let tokenPayload;
 
