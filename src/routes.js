@@ -90,16 +90,6 @@ router.post(
   userController.loginOrSignUp
 );
 
-router.get(
-  '/auth/google',
-  getPassportInstance().authenticate('google', { scope: ['profile', 'email'] })
-);
-router.get(
-  '/auth/google/callback',
-  getPassportInstance().authenticate('google', { failureRedirect: '/login' }),
-  userController.loginOrSignUp
-);
-
 router.get('/services/:id(\\d+)/status', serviceController.getServiceStatus);
 
 export default router;
