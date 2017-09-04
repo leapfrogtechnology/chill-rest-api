@@ -8,7 +8,11 @@ import { UNKNOWN, UP, DOWN } from '../models/Status';
  */
 export function seed(knex) {
   return knex('statuses').insert([
-    { id: UNKNOWN, name: 'Unknown', description: 'Status of the service is Unknown.' },
+    {
+      id: UNKNOWN,
+      name: 'Unknown',
+      description: 'Status of the service is Unknown.'
+    },
     { id: UP, name: 'Up', description: 'Status of the service is Up.' },
     { id: DOWN, name: 'Down', description: 'Status of the service is Down.' }
   ]);
