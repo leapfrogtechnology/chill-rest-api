@@ -4,7 +4,10 @@ exports.up = function(knex) {
   return knex.schema
     .createTable('notification_types', table => {
       table.increments('id').primary();
-      table.string('type').notNullable();
+      table
+        .string('type')
+        .unique()
+        .notNullable();
       table.jsonb('config').notNullable();
       table.timestamp('created_at');
       table.timestamp('updated_at');

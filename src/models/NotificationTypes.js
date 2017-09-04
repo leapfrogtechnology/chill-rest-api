@@ -5,7 +5,7 @@ import logger from '../utils/logger';
 
 const db = getClient();
 
-class NotificatonTypes extends db.Model {
+class NotificationTypes extends db.Model {
   get tableName() {
     return 'notification_types';
   }
@@ -20,12 +20,22 @@ class NotificatonTypes extends db.Model {
    */
   static async fetch(id) {
     try {
-      let result = await NotificatonTypes.where({ id }).fetch();
+      let result = await NotificationTypes.where({ id }).fetch();
+
       return camelize(result.attributes);
     } catch (err) {
       return new Boom.notFound('no entry found of the id');
     }
   }
+
+  static async fetchAll() {
+    logger().info('Fetching all notification types');
+    let result = await NotificationTypes.forge()
+      .orderBy('id', 'ASC')
+      .fetchAll();
+
+    return result;
+  }
 }
 
-export default NotificatonTypes;
+export default NotificationTypes;

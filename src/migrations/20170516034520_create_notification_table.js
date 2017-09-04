@@ -8,8 +8,8 @@ exports.up = function(knex) {
       .notNullable();
     table.boolean('enabled');
     table
-      .integer('notification_type')
-      .references('id')
+      .string('notification_type')
+      .references('type')
       .inTable('notification_types')
       .notNullable();
     table.jsonb('config').notNullable();

@@ -1,31 +1,42 @@
-import { getClient } from '../utils/db';
-import Boom from 'Boom';
-import camelize from 'camelize';
 import logger from '../utils/logger';
+import { getClient } from '../utils/db';
+import NotificationTypes from './NotificationTypes';
 
 const db = getClient();
 
-class NotificatonTypes extends db.Model {
+class Notification extends db.Model {
   get tableName() {
-    return 'notification_types';
+    return 'notification';
   }
 
   get hasTimestamps() {
     return true;
   }
 
-  /**
-   * 
-   * @param {integer} id 
-   */
-  static async fetch(id) {
+  static async create(projectId) {
+    let notificationTypes = await NotificationTypes.fetchAll();
+    let length = notificationTypes.length;
+    let notifications = notificationTypes.toJSON();
+
     try {
-      let result = await NotificatonTypes.where({ id }).fetch();
-      return camelize(result.attributes);
+      logger().info('Creating notification table');
+      for (let i = 1; i <= length; i++) {
+        let notification = new Notification({
+          project_id: projectId,
+          enabled: false,
+          notification_type: notifications[i - 1].type,
+          config: notifications[i - 1].config
+        });
+
+        await notification.save();
+      }
+      logger().info('Notification table created');
+
+      return 'notification table created';
     } catch (err) {
-      return new Boom.notFound('no entry found of the id');
+      logger().error(err);
     }
   }
 }
 
-export default NotificatonTypes;
+export default Notification;

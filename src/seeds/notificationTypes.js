@@ -16,15 +16,11 @@ export function seed(knex) {
   let email = {
     transport: { service: null, auth: { user: null, pass: null } },
     sender: null,
-    receivers: {
-      receiver1: null,
-      receiver2: null,
-      receiver3: null,
-      receiver4: null,
-      receiver5: null
-    },
+    receivers: [],
     templateDir: null
   };
+
+  
   return knex('notification_types').insert([
     {
       type: 'slack',

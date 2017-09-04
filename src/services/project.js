@@ -58,3 +58,7 @@ export async function updateProject(userId, projectId, data) {
   // console.log(data);
   return Project.updateProject(userId, projectId, data);
 }
+
+export async function findNotification(projectId) {
+  return Project.findNotification(projectId);
+}

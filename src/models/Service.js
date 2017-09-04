@@ -55,16 +55,18 @@ class Service extends db.Model {
     } catch (err) {
       logger().error('Error while persisting the service into database', err);
     }
-    if (ifMatch != null) {
+    if (ifMatch !== null) {
       logger().info('Fetching the services of projects of project id', {
         projectId
       });
       try {
         let results = await Service.where({ project_id: projectId }).fetchAll();
         let data = [];
+
         for (let i = 0; i < results.length; i++) {
           data[i] = results.models[i].attributes;
         }
+
         return camelize(data);
       } catch (err) {
         throw new Boom.notFound('no service found');
@@ -83,13 +85,14 @@ class Service extends db.Model {
     } catch (err) {
       logger().error('Error while persisting the service into database', err);
     }
-    if (ifMatch != null) {
+    if (ifMatch !== null) {
       try {
         logger().info('Fetching the service', { serviceId });
         let results = await Service.where({
           id: serviceId,
           project_id: projectId
         }).fetch();
+
         return camelize(results.attributes);
       } catch (err) {
         throw new Boom.notFound('no service found');
@@ -109,7 +112,7 @@ class Service extends db.Model {
       logger().error('Error while persisting the service into database', err);
     }
 
-    if (ifMatch != null) {
+    if (ifMatch !== null) {
       logger().info('Fetching the service', { serviceId });
 
       let result = await Service.where({
@@ -117,7 +120,7 @@ class Service extends db.Model {
         project_id: projectId
       }).fetch();
 
-      if (result == null) {
+      if (result === null) {
         throw new Boom.notFound('No service found under the project');
       }
 
@@ -139,7 +142,7 @@ class Service extends db.Model {
       logger().error('Error while persisting the service into database', err);
     }
 
-    if (ifMatch != null) {
+    if (ifMatch !== null) {
       logger().info(
         'Updating a service of project',
         { projectId },
@@ -150,7 +153,8 @@ class Service extends db.Model {
         id: serviceId,
         project_id: projectId
       }).fetch();
-      if (results == null) {
+
+      if (results === null) {
         throw new Boom.notFound('No Service Found');
       }
 

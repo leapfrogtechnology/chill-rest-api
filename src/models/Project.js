@@ -1,8 +1,10 @@
 import Boom from 'Boom';
 import camelize from 'camelize';
+
 import logger from '../utils/logger';
 import { getClient } from '../utils/db';
 import userProject from './UserProject';
+import Notification from './Notification';
 import * as projectQuery from '../queries/project';
 
 const db = getClient();
@@ -33,12 +35,16 @@ class Project extends db.Model {
 
     logger().info('Creating a new project');
     logger().debug('Project data', data);
+    try {
+      await project.save();
 
-    await project.save();
-
-    logger().info('Project created', { id: project.get('id') });
-
-    return project;
+      logger().info('Project created', { id: project.get('id') });
+      Notification.create(project.get('id'));
+      
+      return project;
+    } catch (err) {
+      logger().error(err);
+    }
   }
 
   static async fetchAll(id) {
@@ -82,13 +88,21 @@ class Project extends db.Model {
     }
 
     db.transaction(async transaction => {
+      logger().info('Deleting user project relation entry');
       await userProject
         .where({ project_id: projectId })
         .destroy({ transacting: transaction });
-
+      logger().info('Deleted user project relation entry');
+      logger().info('Deleting notification entry');
+      await Notification.where({ project_id: projectId }).destroy({
+        transacting: transaction
+      });
+      logger().info('Deleted notification entry');
+      logger().info('Finally deleting project');
       await Project.forge({ id: projectId }).destroy({
         transacting: transaction
       });
+      logger().info('Finally deleted project');
     });
 
     return camelize(results.rows);
@@ -126,6 +140,20 @@ class Project extends db.Model {
     logger().info('project updated');
 
     return camelize(updatedResult.rows);
+  }
+
+  static async findNotification(projectId) {
+    try {
+      logger().info('Checking notifications of ', { projectId });
+      let result = await Notification.where({ project_id: projectId })
+        .orderBy('id', 'ASC')
+        .fetchAll();
+
+      
+      return result;
+    } catch (err) {
+      logger().error(err);
+    }
   }
 }
 
