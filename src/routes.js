@@ -9,6 +9,7 @@ import * as serviceController from './controllers/service';
 import * as projectController from './controllers/project';
 import { validateStatusLog } from './validators/statusLog';
 import * as statusLogController from './controllers/statusLog';
+import * as tokenValidator from './middlewares/verifyGoogleToken';
 
 const router = Router();
 
@@ -82,6 +83,12 @@ router.delete(
 router.get('/statuses', statusController.getAll);
 
 router.get('/status', serviceController.getServiceStatus);
+
+router.post(
+  '/auth/callback',
+  tokenValidator.verifyToken,
+  userController.postData
+);
 
 router.get(
   '/auth/google',

@@ -56,3 +56,8 @@ export function loginOrSignUp(req, res, next) {
     .catch(err => next(err));
   // res.redirect('/profile');
 }
+
+export function postData(req, res, next) {
+  let data = req.body;
+  res.json({ data });
+}
