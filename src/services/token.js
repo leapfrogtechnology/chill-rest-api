@@ -1,8 +1,9 @@
 import jwt from 'jsonwebtoken';
+
 import Token from '../models/Token';
 import logger from '../utils/logger';
-import * as config from '../config/config';
 import * as generateTokens from '../jwt';
+import * as config from '../config/config';
 
 /**
 * Fetch a project from projectId.

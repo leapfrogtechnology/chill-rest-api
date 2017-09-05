@@ -1,7 +1,8 @@
-import { getClient } from '../utils/db';
 import Boom from 'Boom';
 import camelize from 'camelize';
+
 import logger from '../utils/logger';
+import { getClient } from '../utils/db';
 
 const db = getClient();
 
@@ -14,10 +15,6 @@ class NotificationTypes extends db.Model {
     return true;
   }
 
-  /**
-   * 
-   * @param {integer} id 
-   */
   static async fetch(id) {
     try {
       let result = await NotificationTypes.where({ id }).fetch();

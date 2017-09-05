@@ -1,5 +1,6 @@
 import Boom from 'boom';
 import jwt from 'jsonwebtoken';
+
 import User from '../models/User';
 import logger from '../utils/logger';
 import * as tokenService from './token';

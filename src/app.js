@@ -2,12 +2,12 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import express from 'express';
+import bodyParser from 'body-parser';
+import compression from 'compression';
 
 import pkg from '../package';
 import routes from './routes';
 import logger from './utils/logger';
-import bodyParser from 'body-parser';
-import compression from 'compression';
 import * as config from './config/config';
 import * as errorHandler from './middlewares/errorHandler';
 

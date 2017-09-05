@@ -1,5 +1,6 @@
 import Status from './Status';
 import Service from './Service';
+
 import logger from '../utils/logger';
 import { getClient } from '../utils/db';
 

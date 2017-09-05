@@ -1,6 +1,5 @@
-// User project  service
-
 import Boom from 'boom';
+
 import logger from '../utils/logger';
 import UserProject from '../models/UserProject';
 

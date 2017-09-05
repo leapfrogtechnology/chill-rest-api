@@ -20,7 +20,6 @@ export function seed(knex) {
     templateDir: null
   };
 
-  
   return knex('notification_types').insert([
     {
       type: 'slack',

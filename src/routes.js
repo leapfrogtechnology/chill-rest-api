@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 import * as homeController from './controllers/home';
 import * as userController from './controllers/users';
 import { getPassportInstance } from './utils/passport';

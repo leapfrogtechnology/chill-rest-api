@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import HttpStatus from 'http-status-codes';
+
 import * as config from '../config/config';
 import * as tokenServices from '../services/token';
 
@@ -57,6 +58,7 @@ export async function authenticateRefreshToken(req, res, next) {
         .status(HttpStatus.UNAUTHORIZED)
         .json({ message: 'Invalid refresh token.' });
     }
+
     let tokenPayload = jwt.verify(
       refreshToken,
       config.get().auth.refreshSaltKey

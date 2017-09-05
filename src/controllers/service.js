@@ -47,10 +47,14 @@ export function getServiceStatus(req, res, next) {
     .catch(err => next(err));
 }
 
-/*
-    Create a service of project
-    Returns the service json
-*/
+/**
+ * Create a service of project
+ * Returns the service json
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Object} next
+ */
 export function create(req, res, next) {
   let data = {
     name: req.body.name,
@@ -67,7 +71,7 @@ export function create(req, res, next) {
     .catch(err => next(err));
 }
 
-/*
+/**
  * Delete a service of project
  *
  * @param {Object} req

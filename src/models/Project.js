@@ -168,6 +168,7 @@ class Project extends db.Model {
     } catch (err) {
       logger().error('Error while persisting the service into database', err);
     }
+
     if (ifMatch !== null) {
       try {
         for (let i = 0; i < data.length; i++) {
@@ -178,8 +179,9 @@ class Project extends db.Model {
           }).fetch();
 
           logger().info('updating notification of', data[i].notificationType);
-          let newEnabled = data[i].enabled || result.attributes.enabled;
+
           let newConfig = data[i].config || result.attributes.config;
+          let newEnabled = data[i].enabled || result.attributes.enabled;
 
           await Notification.where({
             project_id: projectId,
@@ -193,7 +195,7 @@ class Project extends db.Model {
           );
           logger().info('updated notification of', data[i].notificationType);
         }
-        
+
         return 'values updated';
       } catch (err) {
         logger().error(err);

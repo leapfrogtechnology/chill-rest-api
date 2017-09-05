@@ -1,5 +1,6 @@
 import Boom from 'Boom';
 import camelize from 'camelize';
+
 import logger from '../utils/logger';
 import { getClient } from '../utils/db';
 import userProject from './UserProject';
@@ -30,10 +31,10 @@ class Service extends db.Model {
   */
   static async create(data) {
     let service = new Service({
-      name: data.name,
       url: data.url,
-      project_id: data.projectId,
-      type: data.type
+      type: data.type,
+      name: data.name,
+      project_id: data.projectId
     });
 
     logger().info('Creating a new service');
@@ -55,6 +56,7 @@ class Service extends db.Model {
     } catch (err) {
       logger().error('Error while persisting the service into database', err);
     }
+
     if (ifMatch !== null) {
       logger().info('Fetching the services of projects of project id', {
         projectId
@@ -85,6 +87,7 @@ class Service extends db.Model {
     } catch (err) {
       logger().error('Error while persisting the service into database', err);
     }
+
     if (ifMatch !== null) {
       try {
         logger().info('Fetching the service', { serviceId });
