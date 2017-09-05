@@ -4,9 +4,8 @@ import serviceSchema from '../schema/services';
 /**
  * Validate the post request data of a new Service
  *
- * @param req
- * @param res
- * @param next
+ * @param {Object} req
+ * @param {function} next
  */
 export function validateServiceData(req, res, next) {
   return validate(req.body, serviceSchema)

@@ -12,7 +12,7 @@ let auth = new GoogleAuth();
  * @param {Object} res
  * @param {function} next
  */
-export function verifyToken(req, res, next) {
+export async function verifyToken(req, res, next) {
   let data;
   let userId;
   let payload;

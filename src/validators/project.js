@@ -4,9 +4,8 @@ import projectSchema from '../schema/project';
 /**
  * Validate the post data to add a new Project
  *
- * @param req
- * @param res
- * @param next
+ * @param {Object} req
+ * @param {function} next
  */
 export function validateProjectData(req, res, next) {
   return validate(req.body, projectSchema)
