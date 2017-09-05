@@ -54,7 +54,5 @@ export async function deleteProject(userId, projectId) {
  * @return {Promise}
  */
 export async function updateProject(userId, projectId, data) {
-  // return Project.updateProject(userId,projectId,req.body);
-  // console.log(data);
   return Project.updateProject(userId, projectId, data);
 }

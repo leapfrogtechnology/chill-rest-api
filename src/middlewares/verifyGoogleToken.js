@@ -1,5 +1,5 @@
-import GoogleAuth from 'google-auth-library';
 import HttpStatus from 'http-status-codes';
+import GoogleAuth from 'google-auth-library';
 
 import * as config from '../config/config';
 
@@ -12,7 +12,6 @@ let auth = new GoogleAuth();
  * @param {Object} res
  * @param {function} next
  */
-
 export function verifyToken(req, res, next) {
   let data;
   let userId;
@@ -30,9 +29,9 @@ export function verifyToken(req, res, next) {
   if (payload) {
     data = {
       id: userId,
-      name: payload['name'],
-      email: payload['email'],
-      image: payload['picture']
+      name: payload.name,
+      email: payload.email,
+      image: payload.picture
     };
     req.user = data;
 

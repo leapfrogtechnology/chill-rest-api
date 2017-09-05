@@ -8,6 +8,8 @@ import * as statusController from './controllers/status';
 import * as serviceController from './controllers/service';
 import * as projectController from './controllers/project';
 import { validateStatusLog } from './validators/statusLog';
+import { validateProjectData } from './validators/project';
+import { validateServiceData } from './validators/service';
 import * as statusLogController from './controllers/statusLog';
 import * as tokenValidator from './middlewares/verifyGoogleToken';
 
@@ -36,6 +38,7 @@ router.get(
 router.post(
   '/self/projects',
   authenticate.authenticate,
+  validateProjectData,
   projectController.create
 );
 router.get(
@@ -62,6 +65,7 @@ router.get(
 router.post(
   '/self/projects/:id(\\d+)/services',
   authenticate.authenticate,
+  validateServiceData,
   serviceController.create
 );
 router.get(
