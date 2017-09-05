@@ -97,7 +97,21 @@ export function updateProject(req, res, next) {
  */
 export function findNotification(req, res, next) {
   projectService
-    .findNotification(req.params.projectId)
+    .findNotification(req.params.id)
+    .then(data => res.json(data))
+    .catch(err => next(err));
+}
+
+/**
+ * Update notification settings  
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Object} next
+ */
+export function updateNotification(req, res, next) {
+  projectService
+    .updateNotification(req.body, req.params.id, req.userId)
     .then(data => res.json(data))
     .catch(err => next(err));
 }

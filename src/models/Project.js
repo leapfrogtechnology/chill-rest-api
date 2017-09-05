@@ -12,6 +12,10 @@ const db = getClient();
 export const TYPE_HTTP = 'http';
 export const TYPE_TCP = 'tcp';
 
+function checkIfMAtch(userId, projectId) {
+  return userProject.where({ user_id: userId, project_id: projectId }).fetch();
+}
+
 class Project extends db.Model {
   get tableName() {
     return 'projects';
@@ -40,7 +44,7 @@ class Project extends db.Model {
 
       logger().info('Project created', { id: project.get('id') });
       Notification.create(project.get('id'));
-      
+
       return project;
     } catch (err) {
       logger().error(err);
@@ -149,10 +153,53 @@ class Project extends db.Model {
         .orderBy('id', 'ASC')
         .fetchAll();
 
-      
       return result;
     } catch (err) {
       logger().error(err);
+    }
+  }
+
+  static async updateNotification(data, projectId, userId) {
+    logger().info('checking if user has the project', { projectId });
+    let ifMatch;
+
+    try {
+      ifMatch = await checkIfMAtch(userId, projectId);
+    } catch (err) {
+      logger().error('Error while persisting the service into database', err);
+    }
+    if (ifMatch !== null) {
+      try {
+        for (let i = 0; i < data.length; i++) {
+          logger().info('fetching notification of', data[i].notificationType);
+          let result = await Notification.where({
+            notification_type: data[i].notificationType,
+            project_id: projectId
+          }).fetch();
+
+          logger().info('updating notification of', data[i].notificationType);
+          let newEnabled = data[i].enabled || result.attributes.enabled;
+          let newConfig = data[i].config || result.attributes.config;
+
+          await Notification.where({
+            project_id: projectId,
+            notification_type: data[i].notificationType
+          }).save(
+            {
+              enabled: newEnabled,
+              config: newConfig
+            },
+            { patch: true }
+          );
+          logger().info('updated notification of', data[i].notificationType);
+        }
+        
+        return 'values updated';
+      } catch (err) {
+        logger().error(err);
+      }
+    } else {
+      throw new Boom.notFound('User and Project are not related');
     }
   }
 }
