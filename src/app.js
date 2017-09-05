@@ -31,7 +31,7 @@ app.use('/api', routes);
 app.use(errorHandler.genericErrorHandler);
 app.use(errorHandler.notFoundError);
 
-app.listen(app.get('port'), '0.0.0.0', () => {
+app.listen(app.get('port'), () => {
   logger().info(`Server listening is on port ${app.get('port')}`);
 });
 
