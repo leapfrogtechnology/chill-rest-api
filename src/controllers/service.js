@@ -1,4 +1,18 @@
+import Joi from 'joi';
+
 import * as serviceService from '../services/service';
+
+const schema = Joi.object().keys({
+  name: Joi.string()
+    .alphanum()
+    .required(),
+  url: Joi.string().required(),
+  type: Joi.string().required(),
+  projectId: Joi.number()
+    .integer()
+    .positive()
+    .required()
+});
 
 /**
  * Get all the services.
@@ -58,6 +72,12 @@ export function create(req, res, next) {
     projectId: req.params.id,
     type: req.body.type
   };
+
+  let result = Joi.validate(data, schema);
+
+  if (result.error !== null) {
+    return next(result.error);
+  }
 
   serviceService
     .create(data)

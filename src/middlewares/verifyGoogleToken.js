@@ -7,10 +7,10 @@ let auth = new GoogleAuth();
 
 /**
  * Verify the user with google server using google-auth-library.
- * 
- * @param {Object} req 
- * @param {Object} res 
- * @param {function} next 
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {function} next
  */
 
 export function verifyToken(req, res, next) {

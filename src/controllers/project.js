@@ -1,6 +1,15 @@
 // Project Controller
+import Joi from 'joi';
+
 import * as projectService from '../services/project';
 import * as userProjectService from '../services/userProject';
+
+const schema = Joi.object().keys({
+  name: Joi.string()
+    .alphanum()
+    .required(),
+  description: Joi.string().required()
+});
 
 /** 
  * Create a Project
@@ -11,6 +20,16 @@ import * as userProjectService from '../services/userProject';
  * @param {Object} next
 */
 export function create(req, res, next) {
+  let info = {
+    name: req.body.name,
+    description: req.body.description
+  };
+
+  let result = Joi.validate(info, schema);
+
+  if (result.error !== null) {
+    return next(result.error);
+  }
   projectService
     .create(req.body)
     .then(data => {
