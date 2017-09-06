@@ -56,3 +56,23 @@ export async function deleteProject(userId, projectId) {
 export async function updateProject(userId, projectId, data) {
   return Project.updateProject(userId, projectId, data);
 }
+
+/**
+ * Find notification of a project from projectId.
+ *
+ * @param  {string|Number}  id
+ * @return {Promise}
+ */
+export async function findNotification(projectId) {
+  return Project.findNotification(projectId);
+}
+
+/**
+ * Update notification of a project.
+ *
+ * @param  {string|Number}  id
+ * @return {Promise}
+ */
+export async function updateNotification(data, projectId, userId) {
+  return Project.updateNotification(data, projectId, userId);
+}

@@ -56,6 +56,16 @@ router.delete(
   authenticate.authenticate,
   projectController.deleteProject
 );
+router.get(
+  '/self/projects/:id(\\d+)/notifications',
+  authenticate.authenticate,
+  projectController.findNotification
+);
+router.put(
+  '/self/projects/:id(\\d+)/notifications',
+  authenticate.authenticate,
+  projectController.updateNotification
+);
 
 router.get(
   '/self/projects/:id(\\d+)/services',

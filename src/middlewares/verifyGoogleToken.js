@@ -21,7 +21,6 @@ export async function verifyToken(req, res, next) {
   let clientId = config.get().googleOAuth.clientID;
   let client = new auth.OAuth2(clientId);
 
-
   client.verifyIdToken(token, clientId, (e, login) => {
     payload = login.getPayload();
     userId = payload['sub'];

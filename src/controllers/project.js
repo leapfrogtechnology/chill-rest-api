@@ -59,7 +59,7 @@ export function showAll(req, res, next) {
     .catch(err => next(err));
 }
 
-/*
+/**
  * Delete a project of user
  *
  * @param {Object} req
@@ -73,7 +73,7 @@ export function deleteProject(req, res, next) {
     .catch(err => next(err));
 }
 
-/*
+/**
  * Update a project of user
  *
  * @param {Object} req
@@ -83,6 +83,34 @@ export function deleteProject(req, res, next) {
 export function updateProject(req, res, next) {
   projectService
     .updateProject(req.userId, req.params.projectId, req.body)
+    .then(data => res.json(data))
+    .catch(err => next(err));
+}
+
+/**
+ * Find notification settings
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Object} next
+ */
+export function findNotification(req, res, next) {
+  projectService
+    .findNotification(req.params.id)
+    .then(data => res.json(data))
+    .catch(err => next(err));
+}
+
+/**
+ * Update notification settings
+ *
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Object} next
+ */
+export function updateNotification(req, res, next) {
+  projectService
+    .updateNotification(req.body, req.params.id, req.userId)
     .then(data => res.json(data))
     .catch(err => next(err));
 }
