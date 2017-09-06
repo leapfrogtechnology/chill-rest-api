@@ -12,6 +12,7 @@ import { validateProjectData } from './validators/project';
 import { validateServiceData } from './validators/service';
 import * as statusLogController from './controllers/statusLog';
 import * as tokenValidator from './middlewares/verifyGoogleToken';
+import { validateNotificationData } from './validators/notification';
 
 const router = Router();
 
@@ -64,6 +65,7 @@ router.get(
 router.put(
   '/self/projects/:id(\\d+)/notifications',
   authenticate.authenticate,
+  validateNotificationData,
   projectController.updateNotification
 );
 

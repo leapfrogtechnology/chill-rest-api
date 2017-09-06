@@ -19,12 +19,12 @@ export async function fetchAll(id, userId) {
  * @param  {string|Number}  projectId, serviceId and userId
  * @return {Promise}
  */
-export async function fetch(projectid, serviceid, userId) {
-  return Service.get(projectid, serviceid, userId);
+export async function fetch(projectId, serviceId, userId) {
+  return Service.get(projectId, serviceId, userId);
 }
 
 /**
- * delete a single service by it's projectId.
+ * Delete a single service by it's projectId.
  *
  * @param  {string|Number}  projectId, serviceId and userId
  * @return {Promise}

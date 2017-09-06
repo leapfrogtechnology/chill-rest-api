@@ -28,11 +28,11 @@ export async function fetchAll(id) {
 }
 
 /**
-* Fetch a project from projectId.
-*
-* @param  {string|Number}  id
-* @return {Promise}
-*/
+ * Fetch a project from projectId.
+ *
+ * @param  {string|Number}  id
+ * @return {Promise}
+ */
 export async function fetch(userId, ProjectId) {
   return Project.fetchAProject(userId, ProjectId);
 }
