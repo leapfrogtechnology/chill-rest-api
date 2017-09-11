@@ -4,6 +4,7 @@ import * as homeController from './controllers/home';
 import * as userController from './controllers/users';
 import { getPassportInstance } from './utils/passport';
 import * as authenticate from './middlewares/checkToken';
+import * as redirection from './middlewares/redirection';
 import * as statusController from './controllers/status';
 import * as serviceController from './controllers/service';
 import * as projectController from './controllers/project';
@@ -20,22 +21,21 @@ router.use(getPassportInstance().initialize());
 
 router.get('/', homeController.getAppInfo);
 router.get('/swagger.json', homeController.getSwaggerSpec);
-router.get('/user/:id', userController.get);
+router.get('/self', authenticate.authenticate, userController.get);
 
 router.get('/status', statusLogController.getLatestStatus);
-
 router.get('/projects/:projectId/status/logs', statusLogController.getAll);
 router.post(
   '/projects/:projectId/status',
   validateStatusLog,
   statusLogController.save
 );
+
 router.get(
   '/self/projects',
   authenticate.authenticate,
   projectController.showAll
 );
-
 router.post(
   '/self/projects',
   authenticate.authenticate,

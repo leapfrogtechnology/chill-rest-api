@@ -1,8 +1,8 @@
 import * as userService from '../services/user';
 
-/** 
+/**
  * Create a user.
- * 
+ *
  * @param {Object} req
  * @param {Object} res
  * @param {Object} next
@@ -16,21 +16,21 @@ export function create(req, res, next) {
 
 /**
  * Fetch a user from id.
- * 
+ *
  * @param {Object} req
  * @param {Object} res
  * @param {Object} next
 */
 export function get(req, res, next) {
   userService
-    .fetchById(req.params.id)
+    .fetchById(req.userId)
     .then(data => res.json(data))
     .catch(err => next(err));
 }
 
 /**
  * Fetch a user by name.
- * 
+ *
  * @param {Object} req
  * @param {Object} res
  * @param {Object} next
@@ -44,7 +44,7 @@ export function getUserByName(req, res, next) {
 
 /**
  * Return tokens for logged-in users.
- * 
+ *
  * @param {Object} req
  * @param {Object} res
  * @param {Object} next

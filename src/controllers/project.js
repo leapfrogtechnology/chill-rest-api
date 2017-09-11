@@ -51,7 +51,6 @@ export function get(req, res, next) {
  * @param {Object} res
  * @param {Object} next
  */
-
 export function showAll(req, res, next) {
   projectService
     .fetchAll(req.userId)
