@@ -47,6 +47,9 @@ export default {
       callbackURL: 'http://localhost:8000/api/auth/google/callback'
     }
   },
+  googleOAuth: {
+    clientID: null
+  },
   monitoring: {
     method: 'OPTIONS',
     minInterval: 1000,

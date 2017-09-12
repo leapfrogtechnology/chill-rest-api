@@ -10,7 +10,7 @@ const db = getClient();
 export const TYPE_HTTP = 'http';
 export const TYPE_TCP = 'tcp';
 
-function checkIfMAtch(userId, projectId) {
+function checkIfMatch(userId, projectId) {
   return userProject.where({ user_id: userId, project_id: projectId }).fetch();
 }
 
@@ -49,23 +49,26 @@ class Service extends db.Model {
 
   static async fetchAll(projectId, userId) {
     logger().info('checking if user has the project', { projectId });
-    let ifMatch;
+    let fetchedService;
 
     try {
-      ifMatch = await checkIfMAtch(userId, projectId);
+      fetchedService = await checkIfMatch(userId, projectId);
     } catch (err) {
       logger().error('Error while persisting the service into database', err);
     }
-    if (ifMatch != null) {
+
+    if (fetchedService !== null) {
       logger().info('Fetching the services of projects of project id', {
         projectId
       });
       try {
         let results = await Service.where({ project_id: projectId }).fetchAll();
         let data = [];
+
         for (let i = 0; i < results.length; i++) {
           data[i] = results.models[i].attributes;
         }
+
         return camelize(data);
       } catch (err) {
         throw new Boom.notFound('no service found');
@@ -77,20 +80,22 @@ class Service extends db.Model {
 
   static async get(projectId, serviceId, userId) {
     logger().info('checking if user has the project');
-    let ifMatch;
+    let fetchedService;
 
     try {
-      ifMatch = await checkIfMAtch(userId, projectId);
+      fetchedService = await checkIfMatch(userId, projectId);
     } catch (err) {
       logger().error('Error while persisting the service into database', err);
     }
-    if (ifMatch != null) {
+
+    if (fetchedService !== null) {
       try {
         logger().info('Fetching the service', { serviceId });
         let results = await Service.where({
           id: serviceId,
           project_id: projectId
         }).fetch();
+
         return camelize(results.attributes);
       } catch (err) {
         throw new Boom.notFound('no service found');
@@ -102,15 +107,15 @@ class Service extends db.Model {
 
   static async deleteService(projectId, serviceId, userId) {
     logger().info('checking if user has the project');
-    let ifMatch;
+    let fetchedService;
 
     try {
-      ifMatch = await checkIfMAtch(userId, projectId);
+      fetchedService = await checkIfMatch(userId, projectId);
     } catch (err) {
       logger().error('Error while persisting the service into database', err);
     }
 
-    if (ifMatch != null) {
+    if (fetchedService !== null) {
       logger().info('Fetching the service', { serviceId });
 
       let result = await Service.where({
@@ -118,7 +123,7 @@ class Service extends db.Model {
         project_id: projectId
       }).fetch();
 
-      if (result == null) {
+      if (result === null) {
         throw new Boom.notFound('No service found under the project');
       }
 
@@ -132,15 +137,15 @@ class Service extends db.Model {
 
   static async updateService(projectId, serviceId, data, userId) {
     logger().info('checking if user has the project');
-    let ifMatch;
+    let fetchedService;
 
     try {
-      ifMatch = await checkIfMAtch(userId, projectId);
+      fetchedService = await checkIfMatch(userId, projectId);
     } catch (err) {
       logger().error('Error while persisting the service into database', err);
     }
 
-    if (ifMatch != null) {
+    if (fetchedService !== null) {
       logger().info(
         'Updating a service of project',
         { projectId },
@@ -151,7 +156,8 @@ class Service extends db.Model {
         id: serviceId,
         project_id: projectId
       }).fetch();
-      if (results == null) {
+
+      if (results === null) {
         throw new Boom.notFound('No Service Found');
       }
 
