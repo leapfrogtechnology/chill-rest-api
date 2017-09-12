@@ -14,6 +14,9 @@
     "rollback": "knex migrate:rollback",
     "synchronize": "babel-node ./src/scripts/synchronize"
   },
+  "lint-staged": {
+    "*.js": ["eslint --fix", "git add"]
+  },
   "keywords": ["chill", "rest-api"],
   "authors": [],
   "license": "MIT",
